@@ -13,11 +13,11 @@ var path = {
     FONTS: 'src/fonts/**/**.*',
     JSLIBS: 'src/js-lib/**/*.js',
     MINIFIED_OUT: 'build.min.js',
-    OUT: 'build.js',
+    OUT: 'js/build.js',
     DEST: 'public',
     DEST_BUILD: 'dist/build',
     DEST_SRC: 'public',
-    ENTRY_POINT: './src/js/App.js'
+    ENTRY_POINT: './src/js/App.jsx'
 };
 
 gulp.task('copy', function () {
@@ -29,4 +29,44 @@ gulp.task('copy', function () {
         .pipe(gulp.dest(path.DEST + '/js'));
     gulp.src(path.FONTS)
         .pipe(gulp.dest(path.DEST + '/fonts'));
+});
+
+gulp.task('watch', function() {
+  gulp.watch(path.HTML, ['copy']);
+
+  var watcher  = watchify(browserify({
+    entries: [path.ENTRY_POINT],
+    transform: [reactify],
+    debug: true,
+    cache: {}, packageCache: {}, fullPaths: true
+  }));
+
+  return watcher.on('update', function () {
+    watcher.bundle()
+      .pipe(source(path.OUT))
+      .pipe(gulp.dest(path.DEST_SRC))
+      console.log('Updated', Date.now());
+  })
+    .bundle()
+    .pipe(source(path.OUT))
+    .pipe(gulp.dest(path.DEST_SRC));
+});
+
+gulp.task('build', function(){
+    browserify({
+        entries: [path.ENTRY_POINT],
+        transform: [reactify]
+    })
+        .bundle()
+        .pipe(source(path.MINIFIED_OUT))
+        .pipe(streamify(uglify(path.MINIFIED_OUT)))
+        .pipe(gulp.dest(path.DEST_BUILD));
+});
+
+gulp.task('replaceHTML', function(){
+    gulp.src(path.HTML)
+        .pipe(htmlreplace({
+            'js': 'build/' + path.MINIFIED_OUT
+        }))
+        .pipe(gulp.dest(path.DEST));
 });
