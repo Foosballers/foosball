@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/thedreadpirate/foosball",
   "devDependencies": {
+    "browser-sync": "^2.7.1",
     "browserify": "^10.1.3",
     "gulp": "^3.8.11",
     "gulp-html-replace": "^1.4.5",

@@ -1,6 +1,7 @@
 var gulp = require('gulp'),
     uglify = require('gulp-uglify'),
     htmlreplace = require('gulp-html-replace'),
+    browserSync = require('browser-sync'),
     source = require('vinyl-source-stream'),
     browserify = require('browserify'),
     watchify = require('watchify'),
@@ -31,29 +32,34 @@ gulp.task('copy', function () {
         .pipe(gulp.dest(path.DEST + '/fonts'));
 });
 
-gulp.task('watch', function() {
-  gulp.watch(path.HTML, ['copy']);
+gulp.task('watch', function () {
+    gulp.watch(path.HTML, ['copy']);
 
-  var watcher  = watchify(browserify({
-    entries: [path.ENTRY_POINT],
-    transform: [reactify],
-    debug: true,
-    cache: {}, packageCache: {}, fullPaths: true
-  }));
+    var watcher = watchify(browserify({
+        entries: [path.ENTRY_POINT],
+        transform: [reactify],
+        debug: true,
+        cache: {}, packageCache: {}, fullPaths: true
+    }));
 
-  return watcher.on('update', function () {
-    watcher.bundle()
-      .pipe(source(path.OUT))
-      .pipe(gulp.dest(path.DEST_SRC))
-      console.log('Updated', Date.now());
-  })
-    .bundle()
-    .pipe(source(path.OUT))
-    .pipe(gulp.dest(path.DEST_SRC));
+    browserSync({
+        proxy: 'http://localhost:4567',
+        files: [path.DEST + '/**/*.*']
+    });
+
+    return watcher.on('update', function () {
+        watcher.bundle()
+            .pipe(source(path.OUT))
+            .pipe(gulp.dest(path.DEST_SRC))
+        console.log('Updated', Date.now());
+    })
+        .bundle()
+        .pipe(source(path.OUT))
+        .pipe(gulp.dest(path.DEST_SRC));
 
 });
 
-gulp.task('build', function(){
+gulp.task('build', function () {
     browserify({
         entries: [path.ENTRY_POINT],
         transform: [reactify]
@@ -64,7 +70,7 @@ gulp.task('build', function(){
         .pipe(gulp.dest(path.DEST_BUILD));
 });
 
-gulp.task('replaceHTML', function(){
+gulp.task('replaceHTML', function () {
     gulp.src(path.HTML)
         .pipe(htmlreplace({
             'js': 'build/' + path.MINIFIED_OUT
