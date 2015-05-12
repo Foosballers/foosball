@@ -15,6 +15,17 @@ var currentGame = {
     player2Score: '0'
 };
 
+var queue = [{
+    id: Date.now() + 50,
+    player1: 'Boguste',
+    player2: 'Dimitri'
+},
+    {
+        id: Date.now() + 50,
+        player1: 'Boguste',
+        player2: 'Keith'
+    }];
+
 var games = [
     {
         id: Date.now(),
@@ -37,7 +48,12 @@ function getCurrentGame() {
 
 var GameStore = assign({}, EventEmitter.prototype, {
     getCurrentGame: getCurrentGame,
-    getGames: function(){ return games;}
+    getGames: function () {
+        return games;
+    },
+    getQueue: function () {
+        return queue;
+    }
 });
 
 module.exports = GameStore;
