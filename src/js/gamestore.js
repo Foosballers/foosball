@@ -14,8 +14,8 @@ var currentGame = {
     id: Date.now(),
     player1: 'Keith',
     player2: 'Kavin',
-    player1Score: '9',
-    player2Score: '0'
+    player1Score: 9,
+    player2Score: 0
 };
 
 var queue;
@@ -63,6 +63,18 @@ dispatcher.register(function(action){
            break;
        case constants.QUEUE_UPDATED:
            queue = action.data;
+           gameStore.emitChange();
+           break;
+       case constants.GAME_STARTED:
+           currentGame = action.data;
+           gameStore.emitChange();
+           break;
+       case constants.GOAL_SCORED:
+           if(action.data.player === 'player1'){
+               currentGame.player1Score +=1;
+           }else{
+               currentGame.player2Score += 1;
+           }
            gameStore.emitChange();
            break;
        case constants.GAME_ENDED:

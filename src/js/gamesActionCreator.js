@@ -31,6 +31,20 @@ pusher.subscribe('game:ended', function(data){
        type: constants.GAME_ENDED,
         data: data
     });
-})
+});
+
+pusher.subscribe('game:started', function(data){
+    dispatcher.dispatch({
+        type: constants.GAME_STARTED,
+        data: data
+    });
+});
+
+pusher.subscribe('game:goalscored', function(data){
+    dispatcher.dispatch({
+        type: constants.GOAL_SCORED,
+        data: data
+    });
+});
 
 module.exports = actionCreator;
