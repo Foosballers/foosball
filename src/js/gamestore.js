@@ -29,20 +29,18 @@ function getCurrentGame() {
 var gameStore = assign({}, EventEmitter.prototype, {
     getCurrentGame: getCurrentGame,
     getGames: function () {
-        if(games) {
-            return games;
-        }else{
+        if(!games) {
             actionCreator.loadGames();
-            return [];
+            games = [];
         }
+        return games;
     },
     getQueue: function () {
-        if(queue){
-            return queue;
-        }else{
+        if(!queue){
             actionCreator.loadQueue();
-            return [];
+            queue = [];
         }
+        return queue;
     },
     emitChange: function(){
         this.emit(CHANGE_EVENT);
@@ -51,6 +49,11 @@ var gameStore = assign({}, EventEmitter.prototype, {
         this.on(CHANGE_EVENT, cb);
     }
 });
+
+function gameEnded(game){
+    games.unshift(game);
+    gameStore.emitChange();
+}
 
 dispatcher.register(function(action){
    switch(action.type){
@@ -61,6 +64,9 @@ dispatcher.register(function(action){
        case constants.QUEUE_UPDATED:
            queue = action.data;
            gameStore.emitChange();
+           break;
+       case constants.GAME_ENDED:
+           gameEnded(action.data);
            break;
    } 
 });

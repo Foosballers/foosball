@@ -4,7 +4,8 @@
 
 var eventEmitter = require('events').EventEmitter,
     constants = require('./NotificationConstants'),
-    dispatcher = require('./FoosballDispatcher');
+    dispatcher = require('./FoosballDispatcher'),
+    pusher = require('./pusherConnection');
 
 var actionCreator = {
     loadGames: function () {
@@ -24,5 +25,12 @@ var actionCreator = {
         });
     }
 };
+
+pusher.subscribe('game:ended', function(data){
+    dispatcher.dispatch({
+       type: constants.GAME_ENDED,
+        data: data
+    });
+})
 
 module.exports = actionCreator;
