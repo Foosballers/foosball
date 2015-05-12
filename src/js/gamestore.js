@@ -2,8 +2,11 @@
  * Created by OBrien on 5/11/2015.
  */
 
-var EventEmitter = require('events').EventEmitter;
-var assign = require('object-assign');
+var EventEmitter = require('events').EventEmitter,
+    actionCreator = require('./gamesActionCreator'),
+    dispatcher = require('./FoosballDispatcher'),
+    constants = require('./NotificationConstants'),   
+    assign = require('object-assign');
 
 var CHANGE_EVENT = 'change';
 
@@ -15,45 +18,51 @@ var currentGame = {
     player2Score: '0'
 };
 
-var queue = [{
-    id: Date.now() + 50,
-    player1: 'Boguste',
-    player2: 'Dimitri'
-},
-    {
-        id: Date.now() + 50,
-        player1: 'Boguste',
-        player2: 'Keith'
-    }];
+var queue;
 
-var games = [
-    {
-        id: Date.now(),
-        player1: 'Kavin',
-        player2: 'Keith',
-        player1Score: '0',
-        player2Score: '10'
-    }, {
-        id: Date.now() + 5,
-        player1: 'Keith',
-        player2: 'Kavin',
-        player1Score: '10',
-        player2Score: '1'
-    }
-];
+var games;
 
 function getCurrentGame() {
     return currentGame;
 }
 
-var GameStore = assign({}, EventEmitter.prototype, {
+var gameStore = assign({}, EventEmitter.prototype, {
     getCurrentGame: getCurrentGame,
     getGames: function () {
-        return games;
+        if(games) {
+            return games;
+        }else{
+            actionCreator.loadGames();
+            return [];
+        }
     },
     getQueue: function () {
-        return queue;
+        if(queue){
+            return queue;
+        }else{
+            actionCreator.loadQueue();
+            return [];
+        }
+    },
+    emitChange: function(){
+        this.emit(CHANGE_EVENT);
+    },
+    addChangeListener: function(cb){
+        this.on(CHANGE_EVENT, cb);
     }
 });
 
-module.exports = GameStore;
+dispatcher.register(function(action){
+   switch(action.type){
+       case constants.GAMES_UPDATED:
+           games = action.data;
+           gameStore.emitChange();
+           break;
+       case constants.QUEUE_UPDATED:
+           queue = action.data;
+           gameStore.emitChange();
+           break;
+   } 
+});
+
+module.exports = gameStore;

@@ -1,5 +1,5 @@
 var React = require('react'),
-    gameStore = require('./gamestore')
+    gameStore = require('./gamestore');
 
 var RecentResults = React.createClass({
     render: function () {
