@@ -3,7 +3,7 @@ var React = require('react');
 var GameHeader = React.createClass({
     render: function(){
         if(this.props.game) {
-            return <div className="col-lg-4"><div className="col-lg-4 col-md-6">
+            return <div className="col-lg-4"><div className="col-md-6">
                 <div className="panel panel-primary">
                     <div className="panel-heading">
                         <div className="row">

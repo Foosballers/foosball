@@ -17,8 +17,8 @@ var listing = React.createClass({
        gameStore.addChangeListener(this._onChange);
     },
     render: function(){
-        return <span><GameList name="Recent Games" games={this.state.games} />
-        <GameList name="Upcoming Games" games={this.state.queue} /></span>;
+        return <div className="col-lg-4"><GameList name="Recent Games" games={this.state.games} />
+        <GameList name="Upcoming Games" games={this.state.queue} /></div>;
     }
 });
 
