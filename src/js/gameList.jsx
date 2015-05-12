@@ -3,7 +3,6 @@ var React = require('react'),
 
 var RecentResults = React.createClass({
     render: function () {
-        console.log(this.state);
         var results = this.props.games.map(function (game) {
             return <a href="#" className="list-group-item">
                     <i className={(game.player1Score > game.player2Score) ? "fa fa-trophy fa-fw" : ""}></i>

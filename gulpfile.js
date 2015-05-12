@@ -50,6 +50,7 @@ gulp.task('watch', function() {
     .bundle()
     .pipe(source(path.OUT))
     .pipe(gulp.dest(path.DEST_SRC));
+
 });
 
 gulp.task('build', function(){

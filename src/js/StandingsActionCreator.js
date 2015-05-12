@@ -1,19 +1,24 @@
 var eventEmitter = require('events').EventEmitter,
     constants = require('./NotificationConstants'),
+    pusherConnection = require('./pusherConnection'),
     dispatcher = require('./FoosballDispatcher');
 
 var actionCreator = {
     loadStandings: function () {
-        window.setTimeout(function () {
+        $.ajax('/players/standings').then(function (data) {
             dispatcher.dispatch({
                 type: constants.STANDINGS_UPDATED,
-                data: [
-                    {player: 'Keith', wins: 200, losses: 4}, {player: 'Kavin', wins: 145, losses: 70},
-                    {player: 'Max', wins: 135, losses: 60}
-                ]
+                data: JSON.parse(data)
             });
-        }, 1000);
+        });
     }
 };
+
+pusherConnection.subscribe('standings', function (data) {
+    dispatcher.dispatch({
+        type: constants.STANDINGS_UPDATED,
+        data: data
+    })
+});
 
 module.exports = actionCreator;
