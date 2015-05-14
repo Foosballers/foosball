@@ -26,21 +26,28 @@ var actionCreator = {
     }
 };
 
-pusher.subscribe('game:ended', function(data){
+pusher.subscribe('game:ended', function (data) {
     dispatcher.dispatch({
-       type: constants.GAME_ENDED,
+        type: constants.GAME_ENDED,
         data: data
     });
 });
 
-pusher.subscribe('game:started', function(data){
+pusher.subscribe('game:started', function (data) {
     dispatcher.dispatch({
         type: constants.GAME_STARTED,
         data: data
     });
 });
 
-pusher.subscribe('game:goalscored', function(data){
+pusher.subscribe('game:queued', function (data) {
+    dispatcher.dispatch({
+        type: constants.GAME_QUEUED,
+        data: data
+    });
+});
+
+pusher.subscribe('game:goalscored', function (data) {
     dispatcher.dispatch({
         type: constants.GOAL_SCORED,
         data: data

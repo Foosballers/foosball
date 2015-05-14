@@ -50,6 +50,21 @@ var gameStore = assign({}, EventEmitter.prototype, {
     }
 });
 
+function gameQueued(game){
+    queue.push(game);
+    gameStore.emitChange();
+}
+
+function gameStarted(newGame){
+    currentGame = newGame;
+    var loc = queue.findIndex(function(game){
+        return game.id === newGame.id
+    });
+     queue.splice(loc, 1);
+
+    gameStore.emitChange();
+}
+
 function gameEnded(game){
     games.unshift(game);
     gameStore.emitChange();
@@ -66,8 +81,7 @@ dispatcher.register(function(action){
            gameStore.emitChange();
            break;
        case constants.GAME_STARTED:
-           currentGame = action.data;
-           gameStore.emitChange();
+           gameStarted(action.data);
            break;
        case constants.GOAL_SCORED:
            if(action.data.player === 'player1'){
@@ -79,6 +93,9 @@ dispatcher.register(function(action){
            break;
        case constants.GAME_ENDED:
            gameEnded(action.data);
+           break;
+       case constants.GAME_QUEUED:
+           gameQueued(action.data);
            break;
    } 
 });

@@ -17,6 +17,6 @@ get '/games/recent' do
 end
 
 get '/games/queue' do
-	[{id:  rand(10000), player1: 'Boguste', player2: 'Dimitri'}, 
-	 {id: rand(10000), player1: 'Boguste', player2: 'Keith'}].to_json
+	[{id:  1, player1: 'Boguste', player2: 'Dimitri'},
+	 {id: 2, player1: 'Boguste', player2: 'Keith'}].to_json
 end
