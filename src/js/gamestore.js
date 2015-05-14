@@ -60,7 +60,9 @@ function gameStarted(newGame){
     var loc = queue.findIndex(function(game){
         return game.id === newGame.id
     });
-     queue.splice(loc, 1);
+    if(loc != -1) {
+        queue.splice(loc, 1);
+    }
 
     gameStore.emitChange();
 }
