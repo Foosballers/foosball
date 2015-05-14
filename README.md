@@ -25,3 +25,10 @@
         "id": <id of game>,
         "player": <"player1" or "player2">
     }
+
+<h4>game:queued</h4>
+    {
+        "id": <int>,
+        "player1": <player identifier>,
+        "player2": <player identifier>
+    }
