@@ -48,13 +48,6 @@ pusher.subscribe('game:ended', function(data) {
     });
 });
 
-pusher.subscribe('game:started', function(data) {
-    dispatcher.dispatch({
-        type: constants.GAME_STARTED,
-        data: data
-    });
-});
-
 pusher.subscribe('client-game:started', function(data) {
     dispatcher.dispatch({
         type: constants.GAME_STARTED,
