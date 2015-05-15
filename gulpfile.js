@@ -21,7 +21,7 @@ var path = {
     ENTRY_POINT: './src/js/App.jsx'
 };
 
-gulp.task('copy', function () {
+gulp.task('copy', function() {
     gulp.src(path.HTML)
         .pipe(gulp.dest(path.DEST));
     gulp.src(path.CSS)
@@ -32,34 +32,36 @@ gulp.task('copy', function () {
         .pipe(gulp.dest(path.DEST + '/fonts'));
 });
 
-gulp.task('watch', function () {
+gulp.task('watch', function() {
     gulp.watch(path.HTML, ['copy']);
 
     var watcher = watchify(browserify({
         entries: [path.ENTRY_POINT],
         transform: [reactify],
         debug: true,
-        cache: {}, packageCache: {}, fullPaths: true
+        cache: {},
+        packageCache: {},
+        fullPaths: true
     }));
 
     browserSync({
-        proxy: 'http://localhost:4567',
+        proxy: 'http://localhost:5000',
         files: [path.DEST + '/**/*.*']
     });
 
-    return watcher.on('update', function () {
-        watcher.bundle()
-            .pipe(source(path.OUT))
-            .pipe(gulp.dest(path.DEST_SRC))
-        console.log('Updated', Date.now());
-    })
+    return watcher.on('update', function() {
+            watcher.bundle()
+                .pipe(source(path.OUT))
+                .pipe(gulp.dest(path.DEST_SRC))
+            console.log('Updated', Date.now());
+        })
         .bundle()
         .pipe(source(path.OUT))
         .pipe(gulp.dest(path.DEST_SRC));
 
 });
 
-gulp.task('build', function () {
+gulp.task('build', function() {
     browserify({
         entries: [path.ENTRY_POINT],
         transform: [reactify]
@@ -70,7 +72,7 @@ gulp.task('build', function () {
         .pipe(gulp.dest(path.DEST_BUILD));
 });
 
-gulp.task('replaceHTML', function () {
+gulp.task('replaceHTML', function() {
     gulp.src(path.HTML)
         .pipe(htmlreplace({
             'js': 'build/' + path.MINIFIED_OUT

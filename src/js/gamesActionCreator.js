@@ -8,28 +8,28 @@ var eventEmitter = require('events').EventEmitter,
     pusher = require('./pusherConnection');
 
 var actionCreator = {
-    loadGames: function () {
-        $.ajax('/games/recent').then(function (data) {
+    loadGames: function() {
+        $.ajax('/games/recent').then(function(data) {
             dispatcher.dispatch({
                 type: constants.GAMES_UPDATED,
-                data: JSON.parse(data)
+                data: data
             });
         });
     },
-    loadQueue: function () {
-        $.ajax('/games/queue').then(function (data) {
+    loadQueue: function() {
+        $.ajax('/games/queue').then(function(data) {
             dispatcher.dispatch({
                 type: constants.QUEUE_UPDATED,
-                data: JSON.parse(data)
+                data: data
             });
         });
     },
-    startGame: function(game){
-        if(!game.player1Score){
+    startGame: function(game) {
+        if (!game.player1Score) {
             game.player1Score = 0;
         }
 
-        if(!game.player2Score){
+        if (!game.player2Score) {
             game.player2Score = 0;
         }
 
@@ -41,35 +41,35 @@ var actionCreator = {
     }
 };
 
-pusher.subscribe('game:ended', function (data) {
+pusher.subscribe('game:ended', function(data) {
     dispatcher.dispatch({
         type: constants.GAME_ENDED,
         data: data
     });
 });
 
-pusher.subscribe('game:started', function (data) {
+pusher.subscribe('game:started', function(data) {
     dispatcher.dispatch({
         type: constants.GAME_STARTED,
         data: data
     });
 });
 
-pusher.subscribe('client-game:started', function (data) {
+pusher.subscribe('client-game:started', function(data) {
     dispatcher.dispatch({
         type: constants.GAME_STARTED,
         data: data
     });
 });
 
-pusher.subscribe('game:queued', function (data) {
+pusher.subscribe('game:queued', function(data) {
     dispatcher.dispatch({
         type: constants.GAME_QUEUED,
         data: data
     });
 });
 
-pusher.subscribe('game:goalscored', function (data) {
+pusher.subscribe('game:goalscored', function(data) {
     dispatcher.dispatch({
         type: constants.GOAL_SCORED,
         data: data
