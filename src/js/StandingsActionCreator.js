@@ -8,7 +8,7 @@ var actionCreator = {
         $.ajax('/players/standings').then(function (data) {
             dispatcher.dispatch({
                 type: constants.STANDINGS_UPDATED,
-                data: JSON.parse(data)
+                data: data
             });
         });
     }
