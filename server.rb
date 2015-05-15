@@ -1,5 +1,10 @@
 require 'sinatra'
 require 'json'
+require 'pusher'
+
+Pusher.app_id = '119859'
+Pusher.key = '76abfc1ad02da9810a9d'
+Pusher.secret = '07c4c701b5d1c864459d'
 
 get '/' do
     File.read('public/index.html')
@@ -19,4 +24,10 @@ end
 get '/games/queue' do
 	[{id:  1, player1: 'Boguste', player2: 'Dimitri'},
 	 {id: 2, player1: 'Boguste', player2: 'Keith'}].to_json
+end
+
+post '/pusher/auth' do
+	response = Pusher[params[:channel_name]].authenticate(params[:socket_id])	
+	puts response
+	response.to_json
 end

@@ -23,6 +23,21 @@ var actionCreator = {
                 data: JSON.parse(data)
             });
         });
+    },
+    startGame: function(game){
+        if(!game.player1Score){
+            game.player1Score = 0;
+        }
+
+        if(!game.player2Score){
+            game.player2Score = 0;
+        }
+
+        pusher.publish('game:started', game);
+        dispatcher.dispatch({
+            type: constants.GAME_STARTED,
+            data: game
+        });
     }
 };
 
@@ -34,6 +49,13 @@ pusher.subscribe('game:ended', function (data) {
 });
 
 pusher.subscribe('game:started', function (data) {
+    dispatcher.dispatch({
+        type: constants.GAME_STARTED,
+        data: data
+    });
+});
+
+pusher.subscribe('client-game:started', function (data) {
     dispatcher.dispatch({
         type: constants.GAME_STARTED,
         data: data
