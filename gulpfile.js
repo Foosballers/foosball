@@ -61,15 +61,14 @@ gulp.task('watch', function() {
 
 });
 
-gulp.task('build', function() {
+gulp.task('build',['copy'], function() {
     browserify({
         entries: [path.ENTRY_POINT],
         transform: [reactify]
     })
         .bundle()
-        .pipe(source(path.MINIFIED_OUT))
-        .pipe(streamify(uglify(path.MINIFIED_OUT)))
-        .pipe(gulp.dest(path.DEST_BUILD));
+        .pipe(source(path.OUT))
+        .pipe(gulp.dest(path.DEST_SRC));
 });
 
 gulp.task('replaceHTML', function() {

@@ -40,5 +40,9 @@
     "object-assign": "^2.0.0",
     "pusher": "^1.0.5",
     "react": "^0.13.3"
+  },
+  "scripts": {
+    "start": "node server",
+    "postinstall": "gulp build"
   }
 }

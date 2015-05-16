@@ -48,7 +48,6 @@ app.get('/players/standings', function (req, res) {
             });
 
             players = Object.keys(standings);
-            console.log(players);
             res.send(players.map(function(key){
                 return {player: key, wins: standings[key].wins, losses: standings[key].losses};
             }));
