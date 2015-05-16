@@ -32,7 +32,7 @@ gulp.task('copy', function() {
         .pipe(gulp.dest(path.DEST + '/fonts'));
 });
 
-gulp.task('watch', function() {
+gulp.task('watch', ['copy'], function() {
     gulp.watch(path.HTML, ['copy']);
 
     var watcher = watchify(browserify({

@@ -38,6 +38,8 @@
     "flux": "^2.0.3",
     "object-assign": "^2.0.0",
     "pusher": "^1.0.5",
-    "react": "^0.13.3"
+    "react": "^0.13.3",
+    "nano": "^6.1.2",
+    "pusher-client": "^0.2.3",
   }
 }
