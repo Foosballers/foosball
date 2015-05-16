@@ -1,6 +1,6 @@
 var express = require('express'),
     bodyParser = require('body-parser'),
-    Cloudant = require('Cloudant'),
+    Cloudant = require('cloudant'),
     Pusher = require('pusher');
 
 var me = 'thedreadpirate';
@@ -30,19 +30,11 @@ app.get('/players/standings', function (req, res) {
             if (err)
                 return console.log('[alice.insert] ', err.message)
 
-            //body.map(function(value){
-            //    value.map(function(playerStats){
-            //        Object.keys(playerStats).map(function(key){
-            //            if(result[key]){
-            //                result[key].wins += playerStats[key].wins;
-            //                result[key].losses += playerStats[key].losses;
-            //            }else{
-            //                result[key] = playerStats[key];
-            //            }
-            //        });
-            //    })
-            //})
-            res.send(body.rows[0].value);
+            var flattened = body.rows[0].value.reduce(function(p, n){
+                return p.concat(n);
+            }, []);
+
+            res.send(flattened);
         });
     });
 });
