@@ -1,7 +1,7 @@
 var express = require('express'),
     bodyParser = require('body-parser'),
     config = require('./config'),
-    vault = require('./gameVault'),
+    vault = require('./foosballVault'),
     PusherServer = require('pusher'),
     PusherClient = require('pusher-client'),
     Cloudant = require('cloudant');
@@ -113,10 +113,10 @@ var game_events = [{
         on_receive: function(data){ console.info(data); vault.storeGameEnded(data); }
     }, {
         name: 'client-game:goalscored',
-        on_receive: function(data){ console.info(data) }
+        on_receive: function(data){ console.info(data); vault.storeGoal(data); }
     }, {
         name: 'client-game:queued',
-        on_receive: function(data){ console.info(data) }
+        on_receive: function(data){ console.info(data); vault.storeGameQueued(data); }
     }]
 
 /* -- keith why this no work objs 0-2 are being smashed by last (3)
