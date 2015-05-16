@@ -45,7 +45,6 @@
     "react": "^0.13.3"
   },
   "scripts": {
-    "start": "node server",
-    "postinstall": "gulp build"
+    "start": "node server"
   }
 }
