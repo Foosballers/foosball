@@ -29,30 +29,12 @@ app.get('/players/standings', function (req, res) {
 
         var foosball = cloudant.use('foosball');
         // and insert a document in it
-        foosball.view('page', 'payload', function (err, body) {
+        foosball.view('page', 'payload-simplified', { group:true }, function (err, body) {
             if (err)
-                return console.log('[alice.insert] ', err.message)
+                return console.log('[view.page.payload-simplified] ', err.message)
 
-            var flattened = body.rows[0].value.reduce(function(p, n){
-                return p.concat(n);
-            }, []);
-
-            var standings = {};
-
-            flattened.map(function(subStanding){
-                Object.keys(subStanding).map(function(key){
-                    if(standings[key]) {
-                        standings[key].wins += subStanding[key].wins;
-                        standings[key].losses += subStanding[key].losses;
-                    }else {
-                        standings[key] = subStanding[key];
-                    }
-                });
-            });
-
-            players = Object.keys(standings);
-            res.send(players.map(function(key){
-                return {player: key, wins: standings[key].wins, losses: standings[key].losses};
+            res.send(body.rows.map(function(row) {
+                return {player: row.key, wins: row.value.wins, losses: row.value.losses }
             }));
         });
     });

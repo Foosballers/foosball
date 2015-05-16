@@ -4,7 +4,7 @@
 
 //map
 function (doc) {
-    if(doc.type === 'game-result'){
+    if(doc.type === 'game' && doc.runtime) {
         var winner = doc.player1Score > doc.player2Score ? doc.player1 : doc.player2;
         var loser =  winner === doc.player1 ? doc.player2 : doc.player1;
         emit(doc._id, {winner: winner, loser: loser});

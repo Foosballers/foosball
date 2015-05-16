@@ -16,7 +16,8 @@ function getGame(index) {
         player2: players[getRandomInt(0, players.length - 1)],
         player1Score: index % 2 === 0 ? 10 : getRandomInt(0, 9),
         player2Score: index % 2 !== 0 ? 10 : getRandomInt(0, 9),
-        type: 'game-result'
+        type: 'game',
+        runtime: 123
     };
 
     if (randomGame.player1 === randomGame.player2) {
