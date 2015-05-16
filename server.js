@@ -1,10 +1,13 @@
-var express = require('express');
-var bodyParser = require('body-parser');
-var config = require('./config')
-var vault = require('./gameVault')
+var express = require('express'),
+    bodyParser = require('body-parser'),
+    config = require('./config'),
+    vault = require('./gameVault'),
+    PusherServer = require('pusher'),
+    PusherClient = require('pusher-client'),
+    Cloudant = require('cloudant');
 
-var PusherServer = require('pusher');
-var PusherClient = require('pusher-client')
+var me = 'thedreadpirate';
+var password = 'passw0rd';
 
 var app = express();
 app.use(bodyParser.json());
@@ -19,23 +22,43 @@ var pusher_server = new PusherServer({
     secret: config.pusher.secret
 });
 
-app.get('/players/standings', function(req, res) {
-    res.send([{
-        'player': 'Keith',
-        'wins': 200,
-        'losses': 4
-    }, {
-        'player': 'Kavin',
-        'wins': 23,
-        'losses': 23
-    }, {
-        'player': 'Max',
-        'wins': 30,
-        'losses': 29
-    }])
+app.get('/players/standings', function (req, res) {
+    Cloudant({account: me, password: password}, function (er, cloudant) {
+        if (er)
+            return console.log('Error connecting to Cloudant account %s: %s', me, er.message)
+
+        var foosball = cloudant.use('foosball');
+        // and insert a document in it
+        foosball.view('page', 'payload', function (err, body) {
+            if (err)
+                return console.log('[alice.insert] ', err.message)
+
+            var flattened = body.rows[0].value.reduce(function(p, n){
+                return p.concat(n);
+            }, []);
+
+            var standings = {};
+
+            flattened.map(function(subStanding){
+                Object.keys(subStanding).map(function(key){
+                    if(standings[key]) {
+                        standings[key].wins += subStanding[key].wins;
+                        standings[key].losses += subStanding[key].losses;
+                    }else {
+                        standings[key] = subStanding[key];
+                    }
+                });
+            });
+
+            players = Object.keys(standings);
+            res.send(players.map(function(key){
+                return {player: key, wins: standings[key].wins, losses: standings[key].losses};
+            }));
+        });
+    });
 });
 
-app.get('/games/recent', function(req, res) {
+app.get('/games/recent', function (req, res) {
     res.send([{
         id: 1,
         player1: 'Kavin',
@@ -51,19 +74,19 @@ app.get('/games/recent', function(req, res) {
     }]);
 });
 
-app.get('/games/queue', function(req, res) {
+app.get('/games/queue', function (req, res) {
     res.send([{
         id: 1,
         player1: 'Dimitri',
-        player2: 'Keith',
+        player2: 'Keith'
     }, {
         id: 10,
         player1: 'Dimitri',
-        player2: 'Boguste',
+        player2: 'Boguste'
     }]);
 });
 
-app.post('/pusher/auth', function(req, res) {
+app.post('/pusher/auth', function (req, res) {
     var socketId = req.body.socket_id;
     var channel = req.body.channel_name;
     var auth = pusher_server.authenticate(socketId, channel);
@@ -110,5 +133,6 @@ p_chan.bind(game_events[1].name, game_events[1].on_receive)
 p_chan.bind(game_events[2].name, game_events[2].on_receive)
 p_chan.bind(game_events[3].name, game_events[3].on_receive)
 
-console.info('server started on port %d', config.port)
-app.listen(config.port);
+app.listen(config.port, function () {
+    console.log('listening on *: ', config.port);
+});
