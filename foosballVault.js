@@ -1,8 +1,7 @@
 var config = require('./config')
 var nano = require('nano')(config.couchdb.uri)
 
-var games = nano.use('foosball-games')
-var goals = nano.use('foosball-goals')
+var foosdb = nano.use('foosball')
 
 var debug_callback = function(error,body,header) {
     if(error){
@@ -19,42 +18,46 @@ var now = function() {
 vault = {
     storeGameStarted: function(data) {
         if(!config.couchdb.enabled) return;
+        data.type = 'game'
         data.state = 'inprogess'
         data.epoch_date = now()
-        games.get(data.id, function(error, existing) {
+        foosdb.get(data.id, function(error, existing) {
             if(error) {
                 if(error.error !== 'not_found') {
                     console.error(error); return;
                 }
-                games.insert(data, data.id, debug_callback)
+                foosdb.insert(data, data.id, debug_callback)
                 return
             }
             data._rev = existing._rev
-            games.insert(data, data.id, debug_callback)
+            foosdb.insert(data, data.id, debug_callback)
         })
     },
     storeGameEnded: function(data) {
         if(!config.couchdb.enabled) return;
-        games.get(data.id, function(error, existing) {
+        foosdb.get(data.id, function(error, existing) {
             if(error) { console.error(error); return; }
+            data.type = 'game'
             data.state = 'ended'
             data.runtime = now() - existing.epoch_date
             data.epoch_date = existing.epoch_date
             data._rev = existing._rev
-            games.insert(data, data.id, debug_callback)
+            foosdb.insert(data, data.id, debug_callback)
         })
     },
     storeGoal: function(data) {
         if(!config.couchdb.enabled) return;
+        data.type = 'goal'
         data.epoch_date = now()
-        goals.insert(data, debug_callback)
+        foosdb.insert(data, debug_callback)
     },
     storeGameQueued: function(data) {
         if(!config.couchdb.enabled) return;
+        data.type = 'game'
         data.state = 'queued'
         data.epoch_date = now()
-        games.insert(data, data.id, debug_callback)
-    }
+        foosdb.insert(data, data.id, debug_callback)
+    },
 }
 
 module.exports = vault
