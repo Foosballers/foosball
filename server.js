@@ -1,7 +1,10 @@
-var express = require('express');
-var bodyParser = require('body-parser');
+var express = require('express'),
+    bodyParser = require('body-parser'),
+    Cloudant = require('Cloudant'),
+    Pusher = require('pusher');
 
-var Pusher = require('pusher');
+var me = 'thedreadpirate';
+var password = 'passw0rd';
 
 var app = express();
 app.use(bodyParser.json());
@@ -16,23 +19,23 @@ var pusher = new Pusher({
     secret: '07c4c701b5d1c864459d'
 });
 
-app.get('/players/standings', function(req, res) {
-    res.send([{
-        'player': 'Keith',
-        'wins': 200,
-        'losses': 4
-    }, {
-        'player': 'Kavin',
-        'wins': 23,
-        'losses': 23
-    }, {
-        'player': 'Max',
-        'wins': 30,
-        'losses': 29
-    }])
+app.get('/players/standings', function (req, res) {
+    Cloudant({account: me, password: password}, function (er, cloudant) {
+        if (er)
+            return console.log('Error connecting to Cloudant account %s: %s', me, er.message)
+
+        var foosball = cloudant.use('foosball');
+        // and insert a document in it
+        foosball.view('page', 'payload', function (err, body) {
+            if (err)
+                return console.log('[alice.insert] ', err.message)
+
+            res.send(body);
+        });
+    });
 });
 
-app.get('/games/recent', function(req, res) {
+app.get('/games/recent', function (req, res) {
     res.send([{
         id: 1,
         player1: 'Kavin',
@@ -48,7 +51,7 @@ app.get('/games/recent', function(req, res) {
     }]);
 });
 
-app.get('/games/queue', function(req, res) {
+app.get('/games/queue', function (req, res) {
     res.send([{
         id: 1,
         player1: 'Dimitri',
@@ -60,7 +63,7 @@ app.get('/games/queue', function(req, res) {
     }]);
 });
 
-app.post('/pusher/auth', function(req, res) {
+app.post('/pusher/auth', function (req, res) {
     var socketId = req.body.socket_id;
     var channel = req.body.channel_name;
     var auth = pusher.authenticate(socketId, channel);
@@ -68,4 +71,6 @@ app.post('/pusher/auth', function(req, res) {
 });
 
 var port = process.env.PORT || 5000;
-app.listen(port);
+http.listen(port, function () {
+    console.log('listening on *: ', port);
+});
