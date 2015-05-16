@@ -71,6 +71,6 @@ app.post('/pusher/auth', function (req, res) {
 });
 
 var port = process.env.PORT || 5000;
-http.listen(port, function () {
+app.listen(port, function () {
     console.log('listening on *: ', port);
 });
