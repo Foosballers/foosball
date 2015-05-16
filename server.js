@@ -30,7 +30,19 @@ app.get('/players/standings', function (req, res) {
             if (err)
                 return console.log('[alice.insert] ', err.message)
 
-            res.send(body);
+            //body.map(function(value){
+            //    value.map(function(playerStats){
+            //        Object.keys(playerStats).map(function(key){
+            //            if(result[key]){
+            //                result[key].wins += playerStats[key].wins;
+            //                result[key].losses += playerStats[key].losses;
+            //            }else{
+            //                result[key] = playerStats[key];
+            //            }
+            //        });
+            //    })
+            //})
+            res.send(body.rows[0].value);
         });
     });
 });
