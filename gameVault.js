@@ -17,11 +17,13 @@ var now = function() {
 
 vault = {
     storeGameStarted: function(data) {
+        if(!config.couchdb.enabled) return;
         data.runtime = NaN
         data.epoch_date = now()
         games.insert(data, data.id, debug_callback)
     },
     storeGameEnded: function(data) {
+        if(!config.couchdb.enabled) return;
         games.get(data.id, function(error, existing) {
             if(error) { console.error(error); return; }
             data.runtime = now() - existing.epoch_date

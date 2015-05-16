@@ -9,6 +9,7 @@ config = {
     },
 
     couchdb: {
+        enabled: (process.env.FOOS_USE_COUCHDB || 'false').toLowerCase() === 'true',
         uri: process.env.COUCHDB_URI || 'http://localhost:5984',
     }
 };
