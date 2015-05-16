@@ -34,7 +34,24 @@ app.get('/players/standings', function (req, res) {
                 return p.concat(n);
             }, []);
 
-            res.send(flattened);
+            var standings = {};
+
+            flattened.map(function(subStanding){
+                Object.keys(subStanding).map(function(key){
+                    if(standings[key]) {
+                        standings[key].wins += subStanding[key].wins;
+                        standings[key].losses += subStanding[key].losses;
+                    }else {
+                        standings[key] = subStanding[key];
+                    }
+                });
+            });
+
+            players = Object.keys(standings);
+            console.log(players);
+            res.send(players.map(function(key){
+                return {player: key, wins: standings[key].wins, losses: standings[key].losses};
+            }));
         });
     });
 });
@@ -59,11 +76,11 @@ app.get('/games/queue', function (req, res) {
     res.send([{
         id: 1,
         player1: 'Dimitri',
-        player2: 'Keith',
+        player2: 'Keith'
     }, {
         id: 10,
         player1: 'Dimitri',
-        player2: 'Boguste',
+        player2: 'Boguste'
     }]);
 });
 

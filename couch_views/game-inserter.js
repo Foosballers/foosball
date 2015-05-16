@@ -1,4 +1,4 @@
-var Cloudant = require('Cloudant')
+var Cloudant = require('cloudant')
 
 var me = 'thedreadpirate'; // Set this to your own account
 var password = 'passw0rd';
@@ -9,7 +9,7 @@ function getRandomInt(min, max) {
 
 function getGame(index) {
 
-    var players = ['k', 'm', 'ka', 'q', 'p', 'kd', 'b', 'ke'];
+    var players = ['Keith', 'Max', 'Kavin', 'Boguste', 'Max/Keith', 'Kavin/Dimitri', 'Boguste/Kavin', 'Kevin'];
     var randomGame = {
         _id: index.toString(),
         player1: players[getRandomInt(0, players.length - 1)],
