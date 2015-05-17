@@ -83,3 +83,8 @@ gulp.task('replaceHTML', function() {
 gulp.task('clean', function () {
     del.sync(path.DEST);
 })
+
+gulp.task('re-db', function() {
+   require('./couch_views/database-recreate')
+   require('./couch_views/game-inserter')
+})
