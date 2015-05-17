@@ -18,8 +18,7 @@ function getWinPct(wins, losses) {
 function getStandings() {
     if (standings) {
         return standings.sort(function (a, b) {
-            var diff = getWinPct(a.wins, a.losses) - getWinPct(a.wins, b.losses);
-            return diff * -1;
+            return getWinPct(b.wins, b.losses) - getWinPct(a.wins, a.losses);
         });
     } else {
         actionCreator.loadStandings();
