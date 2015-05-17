@@ -3,6 +3,7 @@ var gulp = require('gulp'),
     htmlreplace = require('gulp-html-replace'),
     browserSync = require('browser-sync'),
     source = require('vinyl-source-stream'),
+    del = require('del'),
     browserify = require('browserify'),
     watchify = require('watchify'),
     reactify = require('reactify'),
@@ -78,3 +79,7 @@ gulp.task('replaceHTML', function() {
         }))
         .pipe(gulp.dest(path.DEST));
 });
+
+gulp.task('clean', function () {
+    del.sync(path.DEST);
+})

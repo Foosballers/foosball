@@ -4,7 +4,8 @@
   "description": "Foosball scoring and stat tracking",
   "main": "gulpfile.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "postinstall": "gulp build",
+    "start": "node server"
   },
   "repository": {
     "type": "git",
@@ -35,16 +36,13 @@
   "dependencies": {
     "body-parser": "^1.12.4",
     "cloudant": "^1.0.0-beta3",
+    "del": "^1.1.1",
     "express": "^4.12.3",
     "flux": "^2.0.3",
+    "nano": "^6.1.2",
     "object-assign": "^2.0.0",
     "pusher": "^1.0.5",
-    "react": "^0.13.3",
-    "nano": "^6.1.2",
     "pusher-client": "^0.2.3",
     "react": "^0.13.3"
-  },
-  "scripts": {
-    "start": "node server"
   }
 }
