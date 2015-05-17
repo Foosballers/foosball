@@ -31,7 +31,7 @@ function insert(index) {
     foosdb.insert(randomGame, index,
         function (err, body, header) {
             if (err)
-                return console.log('[alice.insert] ', err.message)
+                return console.error('[random_game.insert] ', err.message)
 
             console.log('you have inserted a game.')
             console.log(body)
@@ -41,3 +41,31 @@ function insert(index) {
 for (var i = 0; i < 50; i++) {
     insert(i);
 }
+
+foosdb.get('_design/page', function(err,existing) {
+    var page_payload_view = require('./page-payload-simplified')
+    var debug_callback= function(err, body) {
+        if(err)
+            return console.error('[views.insert] ', err)
+        console.log('views inserted')
+        console.log(body)
+    }
+
+    if(err) {
+        if(err.error !== 'not_found') {
+            console.error(err); return;
+        }
+        var views = {
+            views: {
+                payload: page_payload_view
+            }
+        }
+        foosdb.insert(views, '_design/page', debug_callback)
+        return
+    }
+
+    var updated_view = existing.views
+    updated_view.payload = page_payload_view
+    existing.views = updated_view
+    foosdb.insert(existing, '_design/page', debug_callback)
+})
