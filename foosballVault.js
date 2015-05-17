@@ -19,7 +19,7 @@ vault = {
     storeGameStarted: function(data) {
         if(!config.couchdb.enabled) return;
         data.type = 'game'
-        data.state = 'inprogess'
+        data.status = 'inprogess'
         data.epoch_date = now()
         foosdb.get(data.id, function(error, existing) {
             if(error) {
@@ -38,7 +38,7 @@ vault = {
         foosdb.get(data.id, function(error, existing) {
             if(error) { console.error(error); return; }
             data.type = 'game'
-            data.state = 'ended'
+            data.status = 'ended'
             data.runtime = now() - existing.epoch_date
             data.epoch_date = existing.epoch_date
             data._rev = existing._rev
@@ -54,7 +54,7 @@ vault = {
     storeGameQueued: function(data) {
         if(!config.couchdb.enabled) return;
         data.type = 'game'
-        data.state = 'queued'
+        data.status = 'queued'
         data.epoch_date = now()
         foosdb.insert(data, data.id, debug_callback)
     },

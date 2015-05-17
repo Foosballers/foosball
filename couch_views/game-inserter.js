@@ -36,6 +36,7 @@ function insert(randomGame) {
 
 for (var i = 0; i < 50; i++) {
     var randomGame = getGame(i);
+    randomGame.status = 'ended'
     insert(randomGame);
 }
 

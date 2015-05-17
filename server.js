@@ -96,19 +96,15 @@ var game_events = [{
         on_receive: function(data){ console.info(data); vault.storeGameQueued(data); }
     }]
 
-/* -- keith why this no work objs 0-2 are being smashed by last (3)
-for (var idx = 0, len = game_events.length; idx < len; idx++) {
-    var eventable = game_events[idx]
-    p_chan.bind(eventable.name, function(data) {
-        console.info('recevied: %s', eventable.name)
-        eventable.on_receive(data)
-    })
+for (var i = 0, len = game_events.length; i < len; i++) {
+    (function(idx) {
+        var eventable = game_events[idx]
+        p_chan.bind(eventable.name, function(data) {
+            console.info('recevied: %s', eventable.name)
+            eventable.on_receive(data)
+        })
+    })(i)
 }
-*/
-p_chan.bind(game_events[0].name, game_events[0].on_receive)
-p_chan.bind(game_events[1].name, game_events[1].on_receive)
-p_chan.bind(game_events[2].name, game_events[2].on_receive)
-p_chan.bind(game_events[3].name, game_events[3].on_receive)
 
 app.listen(config.port, function () {
     console.log('listening on *: ', config.port);
