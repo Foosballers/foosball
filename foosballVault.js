@@ -58,6 +58,9 @@ vault = {
         data.epoch_date = now()
         foosdb.insert(data, data.id, debug_callback)
     },
+    getView: function(doc, name, opts, cb){
+        foosdb.view('page', 'payload-simplified', opts, cb);
+    }
 }
 
 module.exports = vault

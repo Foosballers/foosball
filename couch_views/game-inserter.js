@@ -1,7 +1,7 @@
-var Cloudant = require('cloudant')
+var config = require('../config');
+var nano = require('nano')(config.couchdb.uri);
 
-var me = 'thedreadpirate'; // Set this to your own account
-var password = 'passw0rd';
+var foosdb = nano.use('foosball')
 
 function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -27,22 +27,15 @@ function getGame(index) {
 }
 
 function insert(index) {
-    Cloudant({account: me, password: password}, function (er, cloudant) {
-        if (er)
-            return console.log('Error connecting to Cloudant account %s: %s', me, er.message)
+    var randomGame = getGame(index);
+    foosdb.insert(randomGame, index,
+        function (err, body, header) {
+            if (err)
+                return console.log('[alice.insert] ', err.message)
 
-        var foosball = cloudant.use('foosball');
-        // and insert a document in it
-        var randomGame = getGame(index);
-        foosball.insert(randomGame,
-            function (err, body, header) {
-                if (err)
-                    return console.log('[alice.insert] ', err.message)
-
-                console.log('you have inserted a game.')
-                console.log(body)
-            });
-    });
+            console.log('you have inserted a game.')
+            console.log(body)
+        });
 }
 
 for (var i = 0; i < 50; i++) {

@@ -4,7 +4,8 @@ var express = require('express'),
     vault = require('./foosballVault'),
     PusherServer = require('pusher'),
     PusherClient = require('pusher-client'),
-    Cloudant = require('cloudant');
+    vault = require('./foosballVault');
+
 
 var me = 'thedreadpirate';
 var password = 'passw0rd';
@@ -23,20 +24,13 @@ var pusher_server = new PusherServer({
 });
 
 app.get('/players/standings', function (req, res) {
-    Cloudant({account: me, password: password}, function (er, cloudant) {
-        if (er)
-            return console.log('Error connecting to Cloudant account %s: %s', me, er.message)
+    vault.getView('page', 'payload-simplified', {group: true}, function (err, body) {
+        if (err)
+            return console.log('[view.page.payload-simplified] ', err.message)
 
-        var foosball = cloudant.use('foosball');
-        // and insert a document in it
-        foosball.view('page', 'payload-simplified', { group:true }, function (err, body) {
-            if (err)
-                return console.log('[view.page.payload-simplified] ', err.message)
-
-            res.send(body.rows.map(function(row) {
-                return {player: row.key, wins: row.value.wins, losses: row.value.losses }
-            }));
-        });
+        res.send(body.rows.map(function (row) {
+            return {player: row.key, wins: row.value.wins, losses: row.value.losses}
+        }));
     });
 });
 
