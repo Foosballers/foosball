@@ -6,10 +6,6 @@ var express = require('express'),
     PusherClient = require('pusher-client'),
     vault = require('./foosballVault');
 
-
-var me = 'thedreadpirate';
-var password = 'passw0rd';
-
 var app = express();
 app.use(bodyParser.json());
 app.use(express.static(__dirname + '/public'));
@@ -35,19 +31,14 @@ app.get('/players/standings', function (req, res) {
 });
 
 app.get('/games/recent', function (req, res) {
-    res.send([{
-        id: 1,
-        player1: 'Kavin',
-        player2: 'Keith',
-        player1Score: '0',
-        player2Score: '10'
-    }, {
-        id: 10,
-        player1: 'Keith',
-        player2: 'Kavin',
-        player1Score: '10',
-        player2Score: '1'
-    }]);
+    vault.getView('games', 'ended', {descending:true, limit:5, include_docs:true}, function (err, body) {
+        if (err)
+            return console.log('[view.games.ended]', err)
+
+        res.send(body.rows.map(function (row) {
+            return row.doc
+        }));
+    });
 });
 
 app.get('/games/queue', function (req, res) {

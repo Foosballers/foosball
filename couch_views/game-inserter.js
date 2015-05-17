@@ -17,7 +17,8 @@ function getGame(index) {
         player1Score: index % 2 === 0 ? 10 : getRandomInt(0, 9),
         player2Score: index % 2 !== 0 ? 10 : getRandomInt(0, 9),
         type: 'game',
-        runtime: 123
+        runtime: 123,
+        epoch_date: getRandomInt(321, 4321)
     };
 
     if (randomGame.player1 === randomGame.player2) {
@@ -48,13 +49,14 @@ for (var i = 52; i < 58; i++) {
     insert(randomGame);
 }
 
-insertView('page', 'payload', 'page-payload-simplified');
-insertView('games', 'queued', 'games-queued');
+insertViews('page', [['payload','page-payload-simplified']])
+insertViews('games', [['queued','games-queued'], ['ended','games-ended']])
 
-function insertView(designDocName, viewName, fileName){
-    var docName = '_design/' + designDocName;
-    foosdb.get(docName, function(err,existing) {
-        var page_payload_view = require('./' + fileName)
+function insertViews(designDocName, listOfViewDatas) {
+    if(typeof listOfViewDatas === undefined || listOfViewDatas.length === 0)
+        return;
+    var docName = '_design/' + designDocName
+    foosdb.get(docName, function(err, existing) {
         var debug_callback= function(err, body) {
             if(err)
                 return console.error('[views.insert] ', err)
@@ -66,16 +68,12 @@ function insertView(designDocName, viewName, fileName){
             if(err.error !== 'not_found') {
                 console.error(err); return;
             }
-            var views = { views: { } }
-            views.views[viewName] = page_payload_view;
-            console.log('view', views);
-            foosdb.insert(views, docName, debug_callback)
-            return
+            existing = { views: { } }
         }
 
-        var updated_view = existing.views
-        updated_view[viewName] = page_payload_view
-        existing.views = updated_view
+        listOfViewDatas.forEach(function(viewData) {
+            existing.views[viewData[0]] = require('./' + viewData[1])
+        })
         foosdb.insert(existing, docName, debug_callback)
     })
 }
