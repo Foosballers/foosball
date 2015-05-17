@@ -24,9 +24,9 @@ var pusher_server = new PusherServer({
 });
 
 app.get('/players/standings', function (req, res) {
-    vault.getView('page', 'payload-simplified', {group: true}, function (err, body) {
+    vault.getView('page', 'payload', {group: true}, function (err, body) {
         if (err)
-            return console.log('[view.page.payload-simplified] ', err.message)
+            return console.log('[view.page.payload]', err)
 
         res.send(body.rows.map(function (row) {
             return {player: row.key, wins: row.value.wins, losses: row.value.losses}
