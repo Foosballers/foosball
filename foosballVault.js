@@ -59,7 +59,7 @@ vault = {
         foosdb.insert(data, data.id, debug_callback)
     },
     getView: function(doc, name, opts, cb){
-        foosdb.view('page', 'payload-simplified', opts, cb);
+        foosdb.view(doc, name, opts, cb);
     }
 }
 

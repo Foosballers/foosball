@@ -26,9 +26,8 @@ function getGame(index) {
     return randomGame;
 }
 
-function insert(index) {
-    var randomGame = getGame(index);
-    foosdb.insert(randomGame, index,
+function insert(randomGame) {
+    foosdb.insert(randomGame, randomGame._id,
         function (err, body, header) {
             if (err)
                 return console.log('[alice.insert] ', err.message)
@@ -37,7 +36,16 @@ function insert(index) {
             console.log(body)
         });
 }
+//
+//for (var i = 0; i < 50; i++) {
+//    var randomGame = getGame(i);
+//    insert(randomGame);
+//}
 
-for (var i = 0; i < 50; i++) {
-    insert(i);
+for (var i = 52; i < 58; i++) {
+    var randomGame = getGame(i);
+    randomGame.player1Score = null;
+    randomGame.player2Score = null;
+    randomGame.status = 'queued';
+    insert(randomGame);
 }

@@ -51,15 +51,16 @@ app.get('/games/recent', function (req, res) {
 });
 
 app.get('/games/queue', function (req, res) {
-    res.send([{
-        id: 1,
-        player1: 'Dimitri',
-        player2: 'Keith'
-    }, {
-        id: 10,
-        player1: 'Dimitri',
-        player2: 'Boguste'
-    }]);
+    vault.getView('games', 'queued', null, function(err, body){
+        if(err) {
+            console.log('games-queue load:', err);
+            return err;
+        }
+        res.send(body.rows.map(function(row){
+            return row.value;
+        }));
+
+    });
 });
 
 app.post('/pusher/auth', function (req, res) {
