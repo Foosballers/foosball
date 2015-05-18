@@ -49,8 +49,29 @@ for (var i = 52; i < 58; i++) {
     insert(randomGame);
 }
 
+function insertRandomGameGoals(gameId, playerX, date) {
+    var goal = { gameid: gameId, player: playerX, epoch_date: date, type: 'goal' }
+    foosdb.insert(goal, function(err, body, header) {
+        if(err)
+            return console.error('[random_goal.insert] ', err.message)
+    });
+}
+
+insertRandomGameGoals('game-03','alpha', 3);
+insertRandomGameGoals('game-03','alpha', 7);
+insertRandomGameGoals('game-03','beta', 17);
+insertRandomGameGoals('game-03','alpha', 21);
+insertRandomGameGoals('game-03','beta', 25);
+insertRandomGameGoals('game-03','alpha', 31);
+insertRandomGameGoals('game-03','beta', 39);
+insertRandomGameGoals('game-03','alpha', 45);
+insertRandomGameGoals('game-03','beta', 61);
+insertRandomGameGoals('game-03','alpha', 70);
+insertRandomGameGoals('game-03','alpha', 81);
+
 insertViews('page', [['payload','page-payload-simplified']])
 insertViews('games', [['queued','games-queued'], ['ended','games-ended']])
+insertViews('goals', [['gameids','goals-gameids']])
 
 function insertViews(designDocName, listOfViewDatas) {
     if(typeof listOfViewDatas === undefined || listOfViewDatas.length === 0)

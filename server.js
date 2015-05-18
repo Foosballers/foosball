@@ -54,6 +54,18 @@ app.get('/games/queue', function (req, res) {
     });
 });
 
+app.get('/goals/:gameId', function (req, res) {
+   vault.getView('goals', 'gameids', {key: req.params.gameId, include_docs: true}, function (err, body) {
+      if(err) {
+         console.error('[goals.gameids] failed: ', err);
+         return err;
+      }
+      res.send(body.rows.map(function(row) {
+         return row.doc;
+      }));
+   });
+});
+
 app.post('/pusher/auth', function (req, res) {
     var socketId = req.body.socket_id;
     var channel = req.body.channel_name;

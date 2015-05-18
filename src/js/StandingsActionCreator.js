@@ -11,6 +11,14 @@ var actionCreator = {
                 data: data
             });
         });
+    },
+    loadGoals: function(gameId) {
+        $.ajax('/goals/' + gameId).then(function (data) {
+            dispatcher.dispatch({
+                type: constants.GAME_GOALS_LOADED,
+                data: data
+            });
+        });
     }
 };
 

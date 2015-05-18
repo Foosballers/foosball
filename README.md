@@ -22,7 +22,7 @@
   
 <h4>game:goalscored</h4>
     {
-        "id": <id of game>,
+        "gameid": <id of game>,
         "player": <"player1" or "player2">
     }
 
