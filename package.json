@@ -41,7 +41,6 @@
     "pusher-client": "^0.2.3",
     "react": "^0.13.3",
     "react-highcharts": "^0.0.7",
-    "react-modal": "^0.2.0",
     "reactify": "^1.1.0",
     "vinyl-source-stream": "^1.1.0",
     "watchify": "^3.2.1"
