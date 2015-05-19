@@ -11,6 +11,7 @@ var gulp = require('gulp'),
 
 var path = {
     HTML: 'src/index.html',
+    ICON: 'src/favicon.ico',
     CSS: 'src/css/*.css',
     FONTS: 'src/fonts/**/**.*',
     JSLIBS: 'src/js-lib/**/*.js',
@@ -24,6 +25,8 @@ var path = {
 
 gulp.task('copy', function() {
     gulp.src(path.HTML)
+        .pipe(gulp.dest(path.DEST));
+    gulp.src(path.ICON)
         .pipe(gulp.dest(path.DEST));
     gulp.src(path.CSS)
         .pipe(gulp.dest(path.DEST + '/css'));
