@@ -5,7 +5,7 @@
 var view = {
     map: function (doc) {
         if (doc.type === 'goal') {
-            emit(doc.gameid, null);
+            emit(doc.gameid);
         }
     }
 }

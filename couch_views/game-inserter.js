@@ -68,6 +68,13 @@ insertRandomGameGoals('game-03','alpha', 45);
 insertRandomGameGoals('game-03','beta', 61);
 insertRandomGameGoals('game-03','alpha', 70);
 insertRandomGameGoals('game-03','alpha', 81);
+insertRandomGameGoals('game-03','beta', 90);
+insertRandomGameGoals('game-03','beta', 100);
+insertRandomGameGoals('game-03','beta', 105);
+insertRandomGameGoals('game-03','beta', 115);
+insertRandomGameGoals('game-03','beta', 130);
+insertRandomGameGoals('game-03','alpha', 150);
+insertRandomGameGoals('game-03','beta', 158);
 
 insertViews('page', [['payload','page-payload-simplified']])
 insertViews('games', [['queued','games-queued'], ['ended','games-ended']])
