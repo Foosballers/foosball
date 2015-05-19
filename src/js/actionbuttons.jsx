@@ -27,6 +27,11 @@ var actionbuttons = React.createClass({
     closeModal: function () {
         this.setState({queuingGame: false});
     },
+    queueGame: function(){
+        console.log(this.refs.player1.getDOMNode().value);
+        console.log(this.refs.player2.getDOMNode().value);
+        gameActions.queueGame({player1: this.refs.player1.getDOMNode().value, player2: this.refs.player2.getDOMNode().value})
+    },
     render: function () {
 
         return <span>
@@ -47,10 +52,13 @@ var actionbuttons = React.createClass({
                                 <div class="form-group">
                                     <div className="panel-body">
                                         <div className="form-group input-group">
-                                            <input className="form-control" placeholder="Player 1"></input>
+                                            <input className="form-control" ref="player1" placeholder="Player 1"></input>
                                         </div>
                                         <div className="form-group input-group">
-                                            <input className="form-control" placeholder="Player 2"></input>
+                                            <input className="form-control" ref="player2" placeholder="Player 2"></input>
+                                        </div>
+                                        <div className="form-group input-group">
+                                            <button type="button" className="btn btn-primary" onClick={this.queueGame}>Submit</button>
                                         </div>
                                     </div>
                                 </div>

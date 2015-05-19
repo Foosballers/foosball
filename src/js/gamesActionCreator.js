@@ -8,6 +8,9 @@ var eventEmitter = require('events').EventEmitter,
     pusher = require('./pusherConnection');
 
 var actionCreator = {
+    queueGame: function(players){
+        console.log(players);
+    },
     loadGames: function() {
         $.ajax('/games/recent').then(function(data) {
             dispatcher.dispatch({
