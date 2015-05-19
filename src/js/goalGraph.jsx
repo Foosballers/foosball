@@ -3,9 +3,10 @@ var React = require('react'),
     Highchart = require('react-highcharts');
 
 Highcharts.setOptions({ colors: ['#337ab7', '#434348'] });
-//Highcharts.setOptions({ colors: ['#434348', '#337ab7'] });
+
 var defaultChart = {
     chart: { type: 'areaspline' },
+    credits: false,
     title: { text: 'goals' },
     tooltip: {
         shared: true,
@@ -23,7 +24,7 @@ var defaultChart = {
             vals.forEach(function(val){
                 response += '<span style="color:' + val[2] +
                         '">\u25CF</span><b> ' + val[1] +
-                        '</b> scored!<br/>' + val[0] + ' / 10<br/>';
+                        '</b> scored #' + val[0] + '!<br/>';
             });
             return response;
         }
@@ -69,7 +70,8 @@ function formatTime(seconds) {
 
 function seriesify(goalview) {
     var p1cnt = 0, p2cnt = 0;
-    var p1goals = [[0,p1cnt++]], p2goals = [[0,p2cnt++]];
+    var p1goals = [{y: p1cnt++, marker: { enabled: false } }],
+        p2goals = [{y: p2cnt++, marker: { enabled: false } }];
     goalview.goals.forEach(function(goal){
         if(goal[1] === 'p1') {
             p1goals.push([goal[0], p1cnt++]);
@@ -81,9 +83,17 @@ function seriesify(goalview) {
     });
     var gcnt_m1 = p1goals.length - 1;
     if(p1goals[gcnt_m1]===null){
-        p1goals[gcnt_m1] = [p2goals[gcnt_m1][0], p1cnt -1];
+        p1goals[gcnt_m1] = {
+            x: p2goals[gcnt_m1][0],
+            y: p1cnt-1,
+            marker: { enabled: false, states: { hover: { enabled: false } } }
+        };
     } else {
-        p2goals[gcnt_m1] = [p1goals[gcnt_m1][0], p2cnt -1];
+        p1goals[gcnt_m1] = {
+            x: p1goals[gcnt_m1][0],
+            y: p1cnt-1,
+            marker: { enabled: false, states: { hover: { enabled: false } } }
+        };
     }
     return [{name: goalview.players['p1'], data: p1goals},
             {name: goalview.players['p2'], data: p2goals}];
