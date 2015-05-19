@@ -7,7 +7,27 @@ Highcharts.setOptions({ colors: ['#337ab7', '#434348'] });
 var defaultChart = {
     chart: { type: 'areaspline' },
     title: { text: 'goals' },
-    tooltip: { shared: true, valueSuffix: ' goals' },
+    tooltip: {
+        shared: true,
+        formatter: function () {
+            var vals = []
+            $.each(this.points, function() { vals.push([this.y,this.series.name,this.series.color]); });
+            var winnerIdx = $.inArray(10, vals.map(function(obj){return obj[0];}));
+            if(winnerIdx !== -1) {
+                return '<span style="color:' + vals[winnerIdx][2] +
+                    '">\u25CF</span><b> ' + vals[winnerIdx][1] +
+                    '</b> won!<br/>';
+            }
+            if(vals[0][0] === 0) { return 'game started<br/>'; }
+            var response = '';
+            vals.forEach(function(val){
+                response += '<span style="color:' + val[2] +
+                        '">\u25CF</span><b> ' + val[1] +
+                        '</b> scored!<br/>' + val[0] + ' / 10<br/>';
+            });
+            return response;
+        }
+    },
     yAxis: {
         min: 0, max: 10, tickInterval: 2,
         labels: { enabled: false },
