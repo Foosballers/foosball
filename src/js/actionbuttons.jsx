@@ -2,7 +2,8 @@ var React = require('react'),
     constants = require('./NotificationConstants'),
     gameActions = require('./gamesActionCreator'),
     gameStore = require('./gamestore'),
-    Modalizer = require('./modal-izer.jsx')
+    GoalGraph = require('./goalGraph.jsx'),
+    Modalizer = require('./modal-izer.jsx');
 
 
 module.exports = React.createClass({
@@ -27,6 +28,7 @@ module.exports = React.createClass({
             header="Start Game"
             buttons={buttons}>
             <p>I said what?</p>
+            <GoalGraph gameId="game-03" />
         </Modalizer>
     </div>
   }

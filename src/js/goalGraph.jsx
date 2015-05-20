@@ -43,6 +43,7 @@ var defaultChart = {
     plotOptions: {
         areaspline: { 
             pointStart: 0,
+            fillOpacity: 0.5,
             marker: {
                 enabled: true,
                 symbol: 'circle',
