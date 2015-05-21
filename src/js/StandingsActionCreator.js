@@ -8,7 +8,15 @@ var actionCreator = {
         $.ajax('/players/standings').then(function (data) {
             dispatcher.dispatch({
                 type: constants.STANDINGS_UPDATED,
-                data: JSON.parse(data)
+                data: data
+            });
+        });
+    },
+    loadGoals: function(gameId) {
+        $.ajax('/goals/' + gameId).then(function (data) {
+            dispatcher.dispatch({
+                type: constants.GAME_GOALS_LOADED,
+                data: {id: gameId, data: data}
             });
         });
     }

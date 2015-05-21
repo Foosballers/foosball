@@ -9,4 +9,3 @@ React.render(<ActionButtons/>, document.getElementById('actions'));
 React.render(<div><DashboardHeader /></div>, document.getElementById('banners'));
 React.render(<GameListings />, document.getElementById('gameListings'));
 React.render(<StandingsTable />, document.getElementById('standings'));
-

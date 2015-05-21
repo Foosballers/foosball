@@ -8,6 +8,9 @@ var eventEmitter = require('events').EventEmitter,
     pusher = require('./pusherConnection');
 
 var actionCreator = {
+    queueGame: function(players){
+        console.log(players);
+    },
     loadGames: function() {
         $.ajax('/games/recent').then(function(data) {
             dispatcher.dispatch({
@@ -44,13 +47,6 @@ var actionCreator = {
 pusher.subscribe('game:ended', function(data) {
     dispatcher.dispatch({
         type: constants.GAME_ENDED,
-        data: data
-    });
-});
-
-pusher.subscribe('game:started', function(data) {
-    dispatcher.dispatch({
-        type: constants.GAME_STARTED,
         data: data
     });
 });

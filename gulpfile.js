@@ -3,6 +3,7 @@ var gulp = require('gulp'),
     htmlreplace = require('gulp-html-replace'),
     browserSync = require('browser-sync'),
     source = require('vinyl-source-stream'),
+    del = require('del'),
     browserify = require('browserify'),
     watchify = require('watchify'),
     reactify = require('reactify'),
@@ -10,6 +11,7 @@ var gulp = require('gulp'),
 
 var path = {
     HTML: 'src/index.html',
+    ICON: 'src/favicon.ico',
     CSS: 'src/css/*.css',
     FONTS: 'src/fonts/**/**.*',
     JSLIBS: 'src/js-lib/**/*.js',
@@ -24,6 +26,8 @@ var path = {
 gulp.task('copy', function() {
     gulp.src(path.HTML)
         .pipe(gulp.dest(path.DEST));
+    gulp.src(path.ICON)
+        .pipe(gulp.dest(path.DEST));
     gulp.src(path.CSS)
         .pipe(gulp.dest(path.DEST + '/css'));
     gulp.src(path.JSLIBS)
@@ -32,7 +36,7 @@ gulp.task('copy', function() {
         .pipe(gulp.dest(path.DEST + '/fonts'));
 });
 
-gulp.task('watch', function() {
+gulp.task('watch', ['copy'], function() {
     gulp.watch(path.HTML, ['copy']);
 
     var watcher = watchify(browserify({
@@ -61,15 +65,14 @@ gulp.task('watch', function() {
 
 });
 
-gulp.task('build', function() {
+gulp.task('build',['copy'], function() {
     browserify({
         entries: [path.ENTRY_POINT],
         transform: [reactify]
     })
         .bundle()
-        .pipe(source(path.MINIFIED_OUT))
-        .pipe(streamify(uglify(path.MINIFIED_OUT)))
-        .pipe(gulp.dest(path.DEST_BUILD));
+        .pipe(source(path.OUT))
+        .pipe(gulp.dest(path.DEST_SRC));
 });
 
 gulp.task('replaceHTML', function() {
@@ -79,3 +82,12 @@ gulp.task('replaceHTML', function() {
         }))
         .pipe(gulp.dest(path.DEST));
 });
+
+gulp.task('clean', function () {
+    del.sync(path.DEST);
+})
+
+gulp.task('re-db', function() {
+   require('./couch_views/database-recreate')
+   require('./couch_views/game-inserter')
+})

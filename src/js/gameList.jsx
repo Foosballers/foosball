@@ -1,10 +1,26 @@
 var React = require('react'),
+    Modalizer = require('./modal-izer.jsx'),
+    GoalGraph = require('./goalGraph.jsx'),
     gameStore = require('./gamestore');
 
 var RecentResults = React.createClass({
-    render: function () {
+    _closeModal: function () {
+        this.refs.recentModal.hide();
+    }
+  , _openModal: function (gameId) {
+        var that = this;
+        return function() {
+            that.setState({chartGameId: gameId});
+            that.refs.recentModal.show();
+        }
+    }
+  , getInitialState: function() {
+        return { }
+    }
+  , render: function () {
+        var f = this._openModal
         var results = this.props.games.map(function (game) {
-            return <a href="#" className="list-group-item">
+            return <a href="#" onClick={f(game.id)} className="list-group-item">
                     <i className={(game.player1Score > game.player2Score) ? "fa fa-trophy fa-fw" : ""}></i>
                     {game.player1} - {game.player1Score}
                 <span className="pull-right">{game.player2Score} - {game.player2}
@@ -21,6 +37,12 @@ var RecentResults = React.createClass({
                     {results}
                 </div>
             </div>
+            <Modalizer ref="recentModal"
+                show={false}
+                header={this.props._modalheader}
+                buttons={[{type:'danger',text:'close',handler:this._closeModal}]}>
+                <GoalGraph gameId={this.state.chartGameId} />
+            </Modalizer>
         </div>;
     }
 });

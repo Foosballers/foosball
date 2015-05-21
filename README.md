@@ -2,7 +2,7 @@
 
 <h2>Pusher Message Definitions</h2>
 
-<h4>game:started</h4>
+<h4>client-game:started</h4>
       {
         "id": <int>,
         "player1": <player identifier of some sort>,
@@ -22,7 +22,7 @@
   
 <h4>game:goalscored</h4>
     {
-        "id": <id of game>,
+        "gameid": <id of game>,
         "player": <"player1" or "player2">
     }
 
