@@ -7,6 +7,8 @@
         "id": <int>,
         "player1": <player identifier of some sort>,
         "player2": <player identifier of some sort>,
+        "player1Color": <hex color no x (eg FF88A3)>,
+        "player2Color": <hex color no x (eg 097912)>,
         "player1Score": <int>,
         "player2Score": <int>
       }

@@ -10,13 +10,8 @@ var EventEmitter = require('events').EventEmitter,
 
 var CHANGE_EVENT = 'change';
 
-var currentGame = {
-    id: Date.now(),
-    player1: 'Keith',
-    player2: 'Kavin',
-    player1Score: 9,
-    player2Score: 0
-};
+var emptyGame = { id: 'not-a-game', player1: 'no current', player2: 'game =[', player1Score: 0, player2Score: 0 };
+var currentGame = emptyGame;
 
 var queue;
 
@@ -69,6 +64,7 @@ function gameStarted(newGame){
 
 function gameEnded(game){
     games.unshift(game);
+    currentGame = emptyGame;
     gameStore.emitChange();
 }
 
@@ -86,7 +82,7 @@ dispatcher.register(function(action){
            gameStarted(action.data);
            break;
        case constants.GOAL_SCORED:
-           if(action.data.player === 'player1'){
+           if(action.data.player === currentGame.player1){
                currentGame.player1Score +=1;
            }else{
                currentGame.player2Score += 1;

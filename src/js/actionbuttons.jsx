@@ -24,7 +24,7 @@ module.exports = React.createClass({
         <button type="button" className="btn btn-primary"
             onClick={this.handleShowModal}>Start Next</button>&nbsp;&nbsp;
         <button type="button" className="btn btn-primary"
-            onClick={this._onStartGameClick}>Start Game</button>&nbsp;&nbsp;
+            onClick={this._onStartNextGameClick}>Start Next Game</button>&nbsp;&nbsp;
         <button type="button" className="btn btn-primary"
             onClick={this._onQueueGameClick}>Queue Game</button>
         <Modalizer ref="gamemodal"
