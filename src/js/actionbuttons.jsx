@@ -10,7 +10,11 @@ module.exports = React.createClass({
   getInitialState: function() {
     return { }
   }
- 
+, _startGame: function(){
+    console.log(this.refs.player1.getDOMNode().value);
+    console.log(this.refs.player2.getDOMNode().value);
+    gameActions.queueGame({player1: this.refs.player1.getDOMNode().value, player2: this.refs.player2.getDOMNode().value})
+  }
 , render: function() {
     var buttons = [
         {type: 'primary', text: 'game on', handler: this._onStartGameClick}
@@ -25,10 +29,27 @@ module.exports = React.createClass({
             onClick={this._onQueueGameClick}>Queue Game</button>
         <Modalizer ref="gamemodal"
             show={false}
-            header="Start Game"
+            header="Start a game"
             buttons={buttons}>
-            <p>I said what?</p>
-            <GoalGraph gameId="game-03" />
+            <div className="panel-body">
+               <div className="row">
+                   <div className="col-lg-12">
+                       <div class="form-group">
+                           <div className="panel-body">
+                               <div className="form-group input-group">
+                                   <input className="form-control" ref="player1" placeholder="Player 1"></input>
+                               </div>
+                               <div className="form-group input-group">
+                                   <input className="form-control" ref="player2" placeholder="Player 2"></input>
+                               </div>
+                               <div className="form-group input-group">
+                                   <button type="button" className="btn btn-primary" onClick={this._startGame}>Submit</button>
+                               </div>
+                           </div>
+                       </div>
+                   </div>
+               </div>
+          </div>
         </Modalizer>
     </div>
   }

@@ -1,75 +1,74 @@
 var React = require('react'),
-    goalStore = require('./goalstore');
+    goalstore = require('./goalstore');
     Highchart = require('react-highcharts');
 
 Highcharts.setOptions({ colors: ['#337ab7', '#434348'] });
 
-var defaultChart = {
-    chart: { type: 'areaspline' },
-    credits: false,
-    title: { text: 'goals' },
-    tooltip: {
-        shared: true,
-        formatter: function () {
-            var vals = []
-            $.each(this.points, function() { vals.push([this.y,this.series.name,this.series.color]); });
-            var winnerIdx = $.inArray(10, vals.map(function(obj){return obj[0];}));
-            if(winnerIdx !== -1) {
-                return '<span style="color:' + vals[winnerIdx][2] +
-                    '">\u25CF</span><b> ' + vals[winnerIdx][1] +
-                    '</b> won!<br/>';
+function chartify(seriesData) {
+    return {
+        chart: { type: 'areaspline' },
+        credits: false,
+        title: { text: 'goals' },
+        tooltip: {
+            shared: true,
+            formatter: function () {
+                var vals = []
+                $.each(this.points, function() { vals.push([this.y,this.series.name,this.series.color]); });
+                var winnerIdx = $.inArray(10, vals.map(function(obj){return obj[0];}));
+                if(winnerIdx !== -1) {
+                    return '<span style="color:' + vals[winnerIdx][2] +
+                        '">\u25CF</span><b> ' + vals[winnerIdx][1] +
+                        '</b> won!<br/>';
+                }
+                if(vals[0][0] === 0) { return 'game started<br/>'; }
+                var response = '';
+                vals.forEach(function(val){
+                    response += '<span style="color:' + val[2] +
+                            '">\u25CF</span><b> ' + val[1] +
+                            '</b> scored #' + val[0] + '!<br/>';
+                });
+                return response;
             }
-            if(vals[0][0] === 0) { return 'game started<br/>'; }
-            var response = '';
-            vals.forEach(function(val){
-                response += '<span style="color:' + val[2] +
-                        '">\u25CF</span><b> ' + val[1] +
-                        '</b> scored #' + val[0] + '!<br/>';
-            });
-            return response;
-        }
-    },
-    yAxis: {
-        min: 0, max: 10, tickInterval: 2,
-        labels: { enabled: false },
-        title: { text: 'score' }
-    },
-    xAxis: {
-        labels: { formatter: function() {
-            return pad2(Math.floor(this.value / 60)) + ":" + pad2(this.value % 60);
+        },
+        yAxis: {
+            min: 0, max: 10, tickInterval: 2,
+            labels: { enabled: false },
+            title: { text: 'score' }
+        },
+        xAxis: {
+            labels: { formatter: function() {
+                return pad2(Math.floor(this.value / 60)) + ":" + pad2(this.value % 60);
+                }
             }
-        }
-    },
-    plotOptions: {
-        areaspline: { 
-            pointStart: 0,
-            fillOpacity: 0.5,
-            marker: {
-                enabled: true,
-                symbol: 'circle',
-                radius: 5,
-                status: { hover: { enabled: true } }
+        },
+        plotOptions: {
+            areaspline: { 
+                pointStart: 0,
+                fillOpacity: 0.5,
+                marker: {
+                    enabled: true,
+                    symbol: 'circle',
+                    radius: 5,
+                    status: { hover: { enabled: true } }
+                },
+            },
+            series: {
+                connectNulls: true,
+                events: { legendItemClick: function(e) { return false; } }
             },
         },
-        series: {
-            connectNulls: true,
-            events: { legendItemClick: function(e) { return false; } }
-        },
-    },
-    series: [{name: 'awaiting server...', data: [1,1,1]}]
+        series: seriesData
+    };
 }
-
 function pad2(n) {
     return n < 10 ? '0' + n : n.toString()
 }
 
-function formatTime(seconds) {
-    return seconds == null ?
-        "00:00" :
-        pad2(Math.floor(this.value / 60)) + ":" + pad2(this.value % 60);
-}
+var defaultChart = chartify([{name: 'awaiting server...', data: [1,1,1]}]);
+var defaultSeries = [{name: 'awaiting server...', data: [1,1,1]}];
 
 function seriesify(goalview) {
+    if(!(goalview && goalview.goals.length > 0)) return [{name: 'awaiting server...', data: [1,1,1]}];
     var p1cnt = 0, p2cnt = 0;
     var p1goals = [{y: p1cnt++, marker: { enabled: false } }],
         p2goals = [{y: p2cnt++, marker: { enabled: false } }];
@@ -90,9 +89,9 @@ function seriesify(goalview) {
             marker: { enabled: false, states: { hover: { enabled: false } } }
         };
     } else {
-        p1goals[gcnt_m1] = {
+        p2goals[gcnt_m1] = {
             x: p1goals[gcnt_m1][0],
-            y: p1cnt-1,
+            y: p2cnt-1,
             marker: { enabled: false, states: { hover: { enabled: false } } }
         };
     }
@@ -100,22 +99,29 @@ function seriesify(goalview) {
             {name: goalview.players['p2'], data: p2goals}];
 }
 
+function randomData() {
+    var rand = [];
+    for(var i = 0; i < 10; i++) {
+        rand.push(Math.floor(Math.random() * 11));
+    }
+    return [{name: 'rand', data: rand}];
+}
+
 module.exports = React.createClass({
     displayName: 'FoosGoalChart',
-    getInitialState: function(){
-        return { chartData: defaultChart };
-    },
     componentDidMount: function(){
-        goalStore.addChangeListener(this._onChange);
-        goalStore.getGoals(this.props.gameId)
+        goalstore.addChangeListener(this._onChange);
+        if(this.props.gameId) {
+            goalstore.getGoals(this.props.gameId);
+        }
     },
     render: function () {
-        return <div id="me"><Highchart config={this.state.chartData}></Highchart></div>
+        var chart = defaultChart;
+        var newData = goalstore.getGoals(this.props.gameId);
+        return <Highchart config={chartify(seriesify(newData) || randomData())}></Highchart>
     },
     _onChange: function() {
-        var series = seriesify(goalStore.getGoals("game1"));
-        var cdata = this.state.chartData;
-        cdata.series = series;
-        this.setState({chartData: cdata});
+        console.log('render triggered');
+        this.setState({});
     }
 });

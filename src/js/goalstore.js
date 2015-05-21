@@ -13,11 +13,7 @@ var CHANGE_EVENT = 'change';
  *    players: {p1: 'name', p2: 'name'},
  *    goals: [[12,'p1'],[14,'p2']....] //sorted by time since start of game
 }*/
-var goals;
-
-function nonNullLen(data) {
-    return data.filter(function(datum) { return datum !== null; }).length;
-}
+var goals = { };
 
 function goalView(raw_goals) {
     if(raw_goals == null || raw_goals.length < 1) { return null; }
@@ -37,16 +33,18 @@ function goalView(raw_goals) {
             return [goal.epoch_date - minEpoch,
                     goal.player === player1 ? 'p1' : 'p2' ];
         })
-    }
+    };
 }
 
 function getGoals(gameId) {
-    if (goals) {
-        return goals;
+    if (goals[gameId]!==undefined) {
+        return goals[gameId];
     } else {
-        actionCreator.loadGoals(gameId);
-        return null;
+        if(gameId) {
+            actionCreator.loadGoals(gameId);
+        }
     }
+    return null;
 }
 
 var goalStore = assign({}, EventEmitter.prototype, {
@@ -62,7 +60,7 @@ var goalStore = assign({}, EventEmitter.prototype, {
 dispatcher.register(function (action) {
     switch (action.type) {
         case constants.GAME_GOALS_LOADED:
-            goals = goalView(action.data);
+            goals[action.data.id] = goalView(action.data.data) || null;
             goalStore.emitChange();
     }
 })

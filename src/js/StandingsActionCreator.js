@@ -16,7 +16,7 @@ var actionCreator = {
         $.ajax('/goals/' + gameId).then(function (data) {
             dispatcher.dispatch({
                 type: constants.GAME_GOALS_LOADED,
-                data: data
+                data: {id: gameId, data: data}
             });
         });
     }

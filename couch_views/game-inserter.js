@@ -11,7 +11,7 @@ function getGame(index) {
 
     var players = ['Keith', 'Max', 'Kavin', 'Boguste', 'Max/Keith', 'Kavin/Dimitri', 'Boguste/Kavin', 'Kevin'];
     var randomGame = {
-        _id: index.toString(),
+        id: index.toString(),
         player1: players[getRandomInt(0, players.length - 1)],
         player2: players[getRandomInt(0, players.length - 1)],
         player1Score: index % 2 === 0 ? 10 : getRandomInt(0, 9),
@@ -28,17 +28,42 @@ function getGame(index) {
 }
 
 function insert(randomGame) {
-    foosdb.insert(randomGame, randomGame._id,
+    foosdb.insert(randomGame, randomGame.id,
         function (err, body, header) {
             if (err)
                 return console.error('[random_game.insert] ', err.message)
         });
 }
 
+function insertGoals(goals) {
+    foosdb.bulk({docs:goals}, function(err,body,header){
+        if (err)
+            return console.error('[random_goal.insert] ', err.message)
+    });
+}
+
 for (var i = 0; i < 50; i++) {
     var randomGame = getGame(i);
     randomGame.status = 'ended'
     insert(randomGame);
+    var p1 = []
+    var p2 = []
+    var totalScore = randomGame.player1Score + randomGame.player2Score;
+    var time = function() {
+        return Math.floor(Math.random() * totalScore * 20)
+    }
+    while(p1.length + p2.length !== totalScore- 1){
+        if(Math.random() < 0.5) {
+            if(p1.length <= randomGame.player1Score && p1.length !== 9)
+                p1.push({gameid: randomGame.id, epoch_date: time(), type: 'goal', player: randomGame.player1})
+        } else if (p2.length < randomGame.player2Score && p2.length !== 9) {
+            p2.push({gameid: randomGame.id, epoch_date: time(), type: 'goal', player: randomGame.player2})
+        }
+    }
+    randomGame.player1Score === 10
+        ? p1.push({gameid: randomGame.id, epoch_date: totalScore * 21, type: 'goal', player: randomGame.player1})
+        : p2.push({gameid: randomGame.id, epoch_date: totalScore * 21, type: 'goal', player: randomGame.player2});
+    insertGoals(p1.concat(p2));
 }
 
 for (var i = 52; i < 58; i++) {
