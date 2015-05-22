@@ -31,11 +31,19 @@ var DashboardHeader = React.createClass({
                     <HeaderItem name="Up Next" game={this.state.queue[0]}/>
                     <Modalizer ref="lastGameModal"
                         show={false}
+                        handleShown={this._showGraph}
+                        handleHide={this._closeGraph}
                         header="- game chart -"
                         buttons={[{type:'danger',text:'close',handler:this._closeModal}]}>
-                        <GoalGraph gameId={last_game ? last_game.id : null} />
+                        <GoalGraph ref="rec_g_graph" gameId={last_game ? last_game.id : null} />
                     </Modalizer>
                 </span>; }
+  , _showGraph: function() {
+    this.refs.rec_g_graph._show()
+  }
+  , _closeGraph: function() {
+    this.refs.rec_g_graph._hide()
+  }
 });
 
 module.exports = DashboardHeader;

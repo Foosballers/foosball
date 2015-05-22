@@ -64,11 +64,10 @@ function pad2(n) {
     return n < 10 ? '0' + n : n.toString()
 }
 
-var defaultChart = chartify([{name: 'awaiting server...', data: [1,1,1]}]);
-var defaultSeries = [{name: 'awaiting server...', data: [1,1,1]}];
+var defaultSeries = [{name: 'awaiting', data: [1,2,1,3,1,3,1,2,1]}, {name: 'server...', data: [3,1,4,1,5,1,4,1,3]}];
 
 function seriesify(goalview) {
-    if(!(goalview && goalview.goals.length > 0)) return [{name: 'awaiting server...', data: [1,1,1]}];
+    if(!(goalview && goalview.goals.length > 0)) return defaultSeries;
     var p1cnt = 0, p2cnt = 0;
     var p1goals = [{y: p1cnt++, marker: { enabled: false } }],
         p2goals = [{y: p2cnt++, marker: { enabled: false } }];
@@ -109,6 +108,9 @@ function randomData() {
 
 module.exports = React.createClass({
     displayName: 'FoosGoalChart',
+    getInitialState: function() {
+        return {shown:false};
+    },
     componentDidMount: function(){
         goalstore.addChangeListener(this._onChange);
         if(this.props.gameId) {
@@ -116,12 +118,16 @@ module.exports = React.createClass({
         }
     },
     render: function () {
-        var chart = defaultChart;
         var newData = goalstore.getGoals(this.props.gameId);
-        return <Highchart config={chartify(seriesify(newData) || randomData())}></Highchart>
+        return this.state.shown ? <Highchart ref="highchart" config={chartify(seriesify(newData) || randomData())}></Highchart> : <div />
     },
     _onChange: function() {
-        console.log('render triggered');
-        this.setState({});
+        this.setState({shown:this.state.shown});
+    },
+    _show: function() {
+        this.setState({shown:true})
+    },
+    _hide: function() {
+        this.setState({shown:false})
     }
 });

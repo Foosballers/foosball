@@ -39,12 +39,20 @@ var RecentResults = React.createClass({
             </div>
             <Modalizer ref="recentModal"
                 show={false}
-                header={this.props._modalheader}
+                handleShown={this._showGraph}
+                handleHide={this._closeGraph}
+                header={this.props._modalheader} 
                 buttons={[{type:'danger',text:'close',handler:this._closeModal}]}>
-                <GoalGraph gameId={this.state.chartGameId} />
+                <GoalGraph gameId={this.state.chartGameId} ref="game_goal_modalizer" />
             </Modalizer>
         </div>;
     }
+  , _showGraph: function() {
+    this.refs.game_goal_modalizer._show()
+  }
+  , _closeGraph: function() {
+    this.refs.game_goal_modalizer._hide()
+  }
 });
 
 module.exports = RecentResults;
