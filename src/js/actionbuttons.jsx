@@ -8,28 +8,37 @@ var React = require('react'),
 
 module.exports = React.createClass({
   getInitialState: function() {
-    return { }
+    return { _onclickcb: function() {}, _modalHeader: 'ima header' }
   }
-, _startGame: function(){
-    console.log(this.refs.player1.getDOMNode().value);
-    console.log(this.refs.player2.getDOMNode().value);
+, _submitGame: function(){
+    gameActions.startGame({player1: this.refs.player1.getDOMNode().value, player2: this.refs.player2.getDOMNode().value})
+    this.handleExternalHide();
+    this._emptyForm();
+  }
+, _queueGame: function(){
     gameActions.queueGame({player1: this.refs.player1.getDOMNode().value, player2: this.refs.player2.getDOMNode().value})
+    this.handleExternalHide();
+    this._emptyForm();
   }
+, _emptyForm: function() {
+    this.refs.player1.getDOMNode().value = '';
+    this.refs.player2.getDOMNode().value = '';
+}
 , render: function() {
     var buttons = [
-        {type: 'primary', text: 'game on', handler: this._onStartGameClick}
+        {type: 'primary', text: 'game on', handler: this.state._onclickcb}
       , {type: 'danger',  text: 'cancel',  handler: this.handleExternalHide}
       ]
     return <div className="panel panel-default">
         <button type="button" className="btn btn-primary"
-            onClick={this.handleShowModal}>Start Next</button>&nbsp;&nbsp;
+            onClick={this._onStartGameClick}>Start Next</button>&nbsp;&nbsp;
         <button type="button" className="btn btn-primary"
             onClick={this._onStartNextGameClick}>Start Next Game</button>&nbsp;&nbsp;
         <button type="button" className="btn btn-primary"
             onClick={this._onQueueGameClick}>Queue Game</button>
         <Modalizer ref="gamemodal"
             show={false}
-            header="Start a game"
+            header={this.state._modalHeader}
             buttons={buttons}>
             <div className="panel-body">
                <div className="row">
@@ -42,9 +51,6 @@ module.exports = React.createClass({
                                <div className="form-group input-group">
                                    <input className="form-control" ref="player2" placeholder="Player 2"></input>
                                </div>
-                               <div className="form-group input-group">
-                                   <button type="button" className="btn btn-primary" onClick={this._startGame}>Submit</button>
-                               </div>
                            </div>
                        </div>
                    </div>
@@ -53,14 +59,8 @@ module.exports = React.createClass({
         </Modalizer>
     </div>
   }
- 
-, handleShowModal: function() {
-    this.refs.gamemodal.show();
-  }
 , handleExternalHide: function() {
     this.refs.gamemodal.hide();
-  }
-, handleDoingNothing: function() {
   }
 , _onStartNextGameClick: function () {
     var queue = gameStore.getQueue();
@@ -69,11 +69,11 @@ module.exports = React.createClass({
     }
   }
 , _onStartGameClick: function () {
-    console.log('start game');
-    this.refs.gamemodal.hide();
+    this.setState({_onclickcb:this._queueGame,_modalHeader:'Start a new game'})
+    this.refs.gamemodal.show();
   }
 , _onQueueGameClick: function () {
-    this.setState({queuingGame: true});
-    console.log('queue game');
+    this.setState({_onclickcb:this._submitGame,_modalHeader:'Queue a game'})
+    this.refs.gamemodal.show();
   }
 })
