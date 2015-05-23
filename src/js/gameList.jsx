@@ -1,24 +1,12 @@
 var React = require('react'),
-    Modalizer = require('./modal-izer.jsx'),
-    GoalGraph = require('./goalGraph.jsx'),
     gameStore = require('./gamestore');
 
 var RecentResults = React.createClass({
-    _closeModal: function () {
-        this.refs.recentModal.hide();
-    }
-  , _openModal: function (gameId) {
-        var that = this;
-        return function() {
-            that.setState({chartGameId: gameId});
-            that.refs.recentModal.show();
-        }
-    }
-  , getInitialState: function() {
+    getInitialState: function() {
         return { }
     }
   , render: function () {
-        var f = this._openModal
+        var f = this.props.onclickcb || function(throwaway) { return function() {}; }
         var results = this.props.games.map(function (game) {
             return <a href="#" onClick={f(game.id)} className="list-group-item">
                     <i className={(game.player1Score > game.player2Score) ? "fa fa-trophy fa-fw" : ""}></i>
@@ -37,22 +25,8 @@ var RecentResults = React.createClass({
                     {results}
                 </div>
             </div>
-            <Modalizer ref="recentModal"
-                show={false}
-                handleShown={this._showGraph}
-                handleHidden={this._closeGraph}
-                header={this.props._modalheader} 
-                buttons={[{type:'danger',text:'close',handler:this._closeModal}]}>
-                <GoalGraph gameId={this.state.chartGameId} ref="game_goal_modalizer" />
-            </Modalizer>
         </div>;
     }
-  , _showGraph: function() {
-    this.refs.game_goal_modalizer._show()
-  }
-  , _closeGraph: function() {
-    this.refs.game_goal_modalizer._hide()
-  }
 });
 
 module.exports = RecentResults;

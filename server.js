@@ -42,13 +42,13 @@ app.get('/games/recent', function (req, res) {
 });
 
 app.get('/games/queue', function (req, res) {
-    vault.getView('games', 'queued', null, function(err, body){
+    vault.getView('games', 'queued', {limit:5,include_docs:true}, function(err, body){
         if(err) {
             console.log('games-queue load:', err);
             return err;
         }
         res.send(body.rows.map(function(row){
-            return row.value;
+            return row.doc;
         }));
 
     });

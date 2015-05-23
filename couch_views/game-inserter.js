@@ -49,16 +49,12 @@ for (var i = 0; i < 50; i++) {
     var p1 = []
     var p2 = []
     var totalScore = randomGame.player1Score + randomGame.player2Score;
-    var time = function() {
-        return Math.floor(Math.random() * totalScore * 20)
+    var time = function() { return Math.floor(Math.random() * totalScore * 20); }
+    for(var _goal = 0; _goal < randomGame.player1Score && _goal < 9; _goal++) {
+        p1.push({gameid:randomGame.id, epoch_date: time(), type: 'goal', player: randomGame.player1});
     }
-    while(p1.length + p2.length !== totalScore- 1){
-        if(Math.random() < 0.5) {
-            if(p1.length <= randomGame.player1Score && p1.length !== 9)
-                p1.push({gameid: randomGame.id, epoch_date: time(), type: 'goal', player: randomGame.player1})
-        } else if (p2.length < randomGame.player2Score && p2.length !== 9) {
-            p2.push({gameid: randomGame.id, epoch_date: time(), type: 'goal', player: randomGame.player2})
-        }
+    for(var _goal = 0; _goal < randomGame.player2Score && _goal < 9; _goal++) {
+        p1.push({gameid:randomGame.id, epoch_date: time(), type: 'goal', player: randomGame.player2});
     }
     randomGame.player1Score === 10
         ? p1.push({gameid: randomGame.id, epoch_date: totalScore * 21, type: 'goal', player: randomGame.player1})
