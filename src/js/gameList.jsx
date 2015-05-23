@@ -40,7 +40,7 @@ var RecentResults = React.createClass({
             <Modalizer ref="recentModal"
                 show={false}
                 handleShown={this._showGraph}
-                handleHide={this._closeGraph}
+                handleHidden={this._closeGraph}
                 header={this.props._modalheader} 
                 buttons={[{type:'danger',text:'close',handler:this._closeModal}]}>
                 <GoalGraph gameId={this.state.chartGameId} ref="game_goal_modalizer" />

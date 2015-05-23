@@ -64,7 +64,7 @@ function pad2(n) {
     return n < 10 ? '0' + n : n.toString()
 }
 
-var defaultSeries = [{name: 'awaiting', data: [1,2,1,3,1,3,1,2,1]}, {name: 'server...', data: [3,1,4,1,5,1,4,1,3]}];
+var defaultSeries = [{name: 'awaiting', data: [1,3,2,4,2,4,2,3,1]}, {name: 'server...', data: [4,2,5,1,7,1,5,2,4]}];
 
 function seriesify(goalview) {
     if(!(goalview && goalview.goals.length > 0)) return defaultSeries;

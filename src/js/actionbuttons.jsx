@@ -8,7 +8,7 @@ var React = require('react'),
 
 module.exports = React.createClass({
   getInitialState: function() {
-    return { _onclickcb: function() {}, _modalHeader: 'ima header' }
+    return { _onformsubmit: function() {}, _modalHeader: 'ima header' }
   }
 , _submitGame: function(){
     gameActions.startGame({player1: this.refs.player1.getDOMNode().value, player2: this.refs.player2.getDOMNode().value})
@@ -26,7 +26,7 @@ module.exports = React.createClass({
 }
 , render: function() {
     var buttons = [
-        {type: 'primary', text: 'game on', handler: this.state._onclickcb}
+        {type: 'primary', text: 'game on', handler: this.state._onformsubmit}
       , {type: 'danger',  text: 'cancel',  handler: this.handleExternalHide}
       ]
     return <div className="panel panel-default">
@@ -43,16 +43,21 @@ module.exports = React.createClass({
             <div className="panel-body">
                <div className="row">
                    <div className="col-lg-12">
-                       <div class="form-group">
-                           <div className="panel-body">
-                               <div className="form-group input-group">
-                                   <input className="form-control" ref="player1" placeholder="Player 1"></input>
-                               </div>
-                               <div className="form-group input-group">
-                                   <input className="form-control" ref="player2" placeholder="Player 2"></input>
-                               </div>
-                           </div>
-                       </div>
+                     <form role="form">
+                         <div class="form-group">
+                             <div className="panel-body">
+                                 <div className="form-group input-group">
+                                     <input className="form-control" ref="player1" placeholder="Player 1"></input>
+                                 </div>
+                                 <div className="form-group input-group">
+                                     <input className="form-control" ref="player2" placeholder="Player 2"></input>
+                                 </div>
+                                  <div className="form-group input-group" hidden="hidden" >
+                                     <button type="submit" className="btn btn-primary hidden hide" onClick={this.state._onformsubmit}>game on</button>
+                                 </div>
+                             </div>
+                         </div>
+                     </form>
                    </div>
                </div>
           </div>
@@ -69,11 +74,11 @@ module.exports = React.createClass({
     }
   }
 , _onStartGameClick: function () {
-    this.setState({_onclickcb:this._queueGame,_modalHeader:'Start a new game'})
+    this.setState({_onformsubmit:this._queueGame,_modalHeader:'Start a new game'})
     this.refs.gamemodal.show();
   }
 , _onQueueGameClick: function () {
-    this.setState({_onclickcb:this._submitGame,_modalHeader:'Queue a game'})
+    this.setState({_onformsubmit:this._submitGame,_modalHeader:'Queue a game'})
     this.refs.gamemodal.show();
   }
 })
