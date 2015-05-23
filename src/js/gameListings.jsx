@@ -4,6 +4,7 @@
 
 var React = require('react'),
     gameStore = require('./gamestore'),
+    gameActions = require('./gamesActionCreator'),
     Modalizer = require('./modal-izer.jsx'),
     GoalGraph = require('./goalGraph.jsx'),
     GameList = require('./gameList.jsx');
@@ -20,7 +21,7 @@ var listing = React.createClass({
     },
     render: function(){
         return <div className="col-lg-4"><GameList name="Recent Games" games={this.state.games} onclickcb={this._openModal} icon="fa-area-chart" />
-            <GameList name="Upcoming Games" games={this.state.queue} />
+            <GameList name="Upcoming Games" games={this.state.queue} onclickcb={this._startQueuedGame} />
             <Modalizer ref="recentModal"
                 show={false}
                 handleShown={this._showGraph}
@@ -39,12 +40,15 @@ var listing = React.createClass({
   , _closeModal: function () {
         this.refs.recentModal.hide();
     }
-  , _openModal: function (gameId) {
+  , _openModal: function (game) {
         var that = this;
         return function() {
-            that.setState({chartGameId: gameId});
+            that.setState({chartGameId: game.id});
             that.refs.recentModal.show();
         }
+    }
+  , _startQueuedGame: function(game){
+        return function() { gameActions.startGame(game); };
     }
 });
 

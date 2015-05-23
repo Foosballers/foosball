@@ -2,6 +2,7 @@ var React = require('react'),
     HeaderItem = require('./gameHeaderItem.jsx'),
     Modalizer = require('./modal-izer.jsx'),
     GoalGraph = require('./goalGraph.jsx'),
+    gameActions = require('./gamesActionCreator'),
     gameStore = require('./gamestore.js');
 
 var DashboardHeader = React.createClass({
@@ -9,10 +10,7 @@ var DashboardHeader = React.createClass({
         this.refs.lastGameModal.hide();
     }
   , _openModal: function () {
-        var that = this;
-        return function() {
-            that.refs.lastGameModal.show();
-        }
+        this.refs.lastGameModal.show();
     }
   , getInitialState: function () {
         return {games: gameStore.getGames(), queue: gameStore.getQueue()}
@@ -27,8 +25,8 @@ var DashboardHeader = React.createClass({
         var last_game = this.state.games[0];
         return <span>
                     <HeaderItem name="Current Game" game={gameStore.getCurrentGame()}/>
-                    <HeaderItem name="Last Game" game={this.state.games[0]} clickable={this._openModal()} />
-                    <HeaderItem name="Up Next" game={this.state.queue[0]}/>
+                    <HeaderItem name="Last Game" game={this.state.games[0]} clickable={this._openModal} />
+                    <HeaderItem name="Up Next" game={this.state.queue[0]} clickable={this._startUpNextGame} />
                     <Modalizer ref="lastGameModal"
                         show={false}
                         handleShown={this._showGraph}
@@ -43,6 +41,11 @@ var DashboardHeader = React.createClass({
   }
   , _closeGraph: function() {
     this.refs.rec_g_graph._hide()
+  }
+  , _startUpNextGame: function(game) {
+    if(this.state.queue.length > 0) {
+        gameActions.startGame(this.state.queue[0]);
+    }
   }
 });
 
