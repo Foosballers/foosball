@@ -40,27 +40,21 @@ module.exports = React.createClass({
             show={false}
             header={this.state._modalHeader}
             buttons={buttons}>
-            <div className="panel-body">
-               <div className="row">
-                   <div className="col-lg-12">
-                     <form role="form">
-                         <div class="form-group">
-                             <div className="panel-body">
-                                 <div className="form-group input-group">
-                                     <input className="form-control" ref="player1" placeholder="Player 1"></input>
-                                 </div>
-                                 <div className="form-group input-group">
-                                     <input className="form-control" ref="player2" placeholder="Player 2"></input>
-                                 </div>
-                                  <div className="form-group input-group" hidden="hidden" >
-                                     <button type="submit" className="btn btn-primary hidden hide" onClick={this.state._onformsubmit}>game on</button>
-                                 </div>
-                             </div>
-                         </div>
-                     </form>
-                   </div>
-               </div>
-          </div>
+        <div className="panel-body">
+          <form role="form">
+            <div className="input-group">
+              <span className="input-group-addon"><i className="fa fa-user"></i></span>
+              <input className="form-control" ref="player1" placeholder="Player 1"></input>
+            </div><br />
+            <div className="input-group">
+              <span className="input-group-addon"><i className="fa fa-user"></i></span>
+              <input className="form-control" ref="player2" placeholder="Player 2"></input>
+            </div>
+            <div className="input-group" hidden="hidden" >
+              <button type="submit" className="btn btn-primary hidden hide" onClick={this.state._onformsubmit}>game on</button>
+            </div>
+          </form>
+        </div>
         </Modalizer>
     </div>
   }
@@ -74,11 +68,11 @@ module.exports = React.createClass({
     }
   }
 , _onStartGameClick: function () {
-    this.setState({_onformsubmit:this._queueGame,_modalHeader:'Start a new game'})
+    this.setState({_onformsubmit:this._submitGame,_modalHeader:'Start a new game'})
     this.refs.gamemodal.show();
   }
 , _onQueueGameClick: function () {
-    this.setState({_onformsubmit:this._submitGame,_modalHeader:'Queue a game'})
+    this.setState({_onformsubmit:this._queueGame,_modalHeader:'Queue a game'})
     this.refs.gamemodal.show();
   }
 })
