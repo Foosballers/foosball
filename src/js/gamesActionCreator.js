@@ -16,7 +16,7 @@ var eventEmitter = require('events').EventEmitter,
 
 var actionCreator = {
     loadGames: function() {
-        $.ajax('/games/recent').then(function(data) {
+        $.ajax('/games/recent?limit=5').then(function(data) {
             dispatcher.dispatch({
                 type: constants.GAMES_UPDATED,
                 data: data
@@ -24,7 +24,7 @@ var actionCreator = {
         });
     },
     loadQueue: function() {
-        $.ajax('/games/queue').then(function(data) {
+        $.ajax('/games/queue?limit=5').then(function(data) {
             dispatcher.dispatch({
                 type: constants.QUEUE_UPDATED,
                 data: data
@@ -42,8 +42,6 @@ var actionCreator = {
         });
     },
     queueGame: function(game){
-        if (!game.player1Score) { game.player1Score = 0; }
-        if (!game.player2Score) { game.player2Score = 0; }
         if (!game.id) { game.id = game_guid(); }
         pusher.publish('game:queued', game);
         dispatcher.dispatch({

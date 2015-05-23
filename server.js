@@ -31,7 +31,8 @@ app.get('/players/standings', function (req, res) {
 });
 
 app.get('/games/recent', function (req, res) {
-    vault.getView('games', 'ended', {descending:true, limit:5, include_docs:true}, function (err, body) {
+    limitn = req.query.limit || 5;
+    vault.getView('games', 'ended', {descending:true, limit:limitn, include_docs:true}, function (err, body) {
         if (err)
             return console.log('[view.games.ended]', err)
 
@@ -42,7 +43,8 @@ app.get('/games/recent', function (req, res) {
 });
 
 app.get('/games/queue', function (req, res) {
-    vault.getView('games', 'queued', {limit:5,include_docs:true}, function(err, body){
+    limitn = req.param.limit || 5;
+    vault.getView('games', 'queued', {limit:limitn,include_docs:true}, function(err, body){
         if(err) {
             console.log('games-queue load:', err);
             return err;
