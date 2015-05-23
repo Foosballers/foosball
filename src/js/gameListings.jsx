@@ -19,7 +19,7 @@ var listing = React.createClass({
        gameStore.addChangeListener(this._onChange);
     },
     render: function(){
-        return <div className="col-lg-4"><GameList name="Recent Games" games={this.state.games} onclickcb={this._openModal} />
+        return <div className="col-lg-4"><GameList name="Recent Games" games={this.state.games} onclickcb={this._openModal} icon="fa-area-chart" />
             <GameList name="Upcoming Games" games={this.state.queue} />
             <Modalizer ref="recentModal"
                 show={false}

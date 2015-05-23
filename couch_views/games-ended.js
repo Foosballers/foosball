@@ -5,7 +5,7 @@
 var view = {
     map: function (doc) {
         if (doc.status === 'ended') {
-            emit(doc.epoch_date, null);
+            emit(doc.epoch_date);
         }
     }
 }
