@@ -69,20 +69,15 @@ var BootstrapModalMixin = function() {
   , toggle: function() {
       $(this.getDOMNode()).modal('toggle')
     }
-  , renderCloseButton: function() {
-      return <button
-        type="button"
-        className="close"
-        onClick={this.hide}
-        dangerouslySetInnerHTML={{__html: '&times'}}
-      />
-    }
   }
 }()
 //
 
 module.exports = React.createClass({
   mixins: [BootstrapModalMixin]
+, handleShown: function() {
+  this.refs._xclose.getDOMNode().focus();
+}
  
 , render: function() {
     var buttons = this.props.buttons.map(function(button) {
@@ -90,12 +85,11 @@ module.exports = React.createClass({
         {button.text}
       </button>
     })
- 
     return <div className="modal fade">
       <div className="modal-dialog">
         <div className="modal-content">
           <div className="modal-header">
-            {this.renderCloseButton()}
+            <button type="button" className="close" ref="_xclose" onClick={this.hide}>×</button>
             <strong>{this.props.header}</strong>
           </div>
           <div className="modal-body">
