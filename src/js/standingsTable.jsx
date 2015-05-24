@@ -20,10 +20,10 @@ var standingsTable = React.createClass({
         return <table className='table table-bordered table-striped'>
             <thead>
                 <tr>
-                    <td>Player</td>
-                    <td>Wins</td>
-                    <td>Losses</td>
-                    <td>Winning Percentage</td>
+                    <th>Player</th>
+                    <th>Wins</th>
+                    <th>Losses</th>
+                    <th>Winning Percentage</th>
                 </tr>
             </thead>
             <tbody>

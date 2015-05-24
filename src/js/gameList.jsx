@@ -22,7 +22,7 @@ var RecentResults = React.createClass({
         })
         return <div className="panel panel-default">
             <div className="panel-heading">
-                <i className="fa fa-futbol-o fa-fw"></i>{this.props.name}
+                <i className="fa fa-futbol-o fa-fw"></i> {this.props.name}
             </div>
             <div className="panel-body">
                 <div className="list-group">

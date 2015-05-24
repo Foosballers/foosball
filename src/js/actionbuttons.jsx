@@ -13,17 +13,11 @@ module.exports = React.createClass({
 , _submitGame: function(){
     gameActions.startGame({player1: this.refs.player1.getDOMNode().value, player2: this.refs.player2.getDOMNode().value})
     this.handleExternalHide();
-    this._emptyForm();
   }
 , _queueGame: function(){
     gameActions.queueGame({player1: this.refs.player1.getDOMNode().value, player2: this.refs.player2.getDOMNode().value})
     this.handleExternalHide();
-    this._emptyForm();
   }
-, _emptyForm: function() {
-    this.refs.player1.getDOMNode().value = '';
-    this.refs.player2.getDOMNode().value = '';
-}
 , render: function() {
     var buttons = [
         {type: 'primary', text: 'game on', handler: this.state._onformsubmit}
@@ -39,6 +33,8 @@ module.exports = React.createClass({
         <Modalizer ref="gamemodal"
             show={false}
             header={this.state._modalHeader}
+            handleShown={this._setinputfocus}
+            handleHidden={this._emptyForm}
             buttons={buttons}>
         <div className="panel-body">
           <form role="form">
@@ -75,4 +71,11 @@ module.exports = React.createClass({
     this.setState({_onformsubmit:this._queueGame,_modalHeader:'Queue a game'})
     this.refs.gamemodal.show();
   }
+, _setinputfocus: function () {
+    this.refs.player1.getDOMNode().focus();
+  }
+, _emptyForm: function() {
+    this.refs.player1.getDOMNode().value = '';
+    this.refs.player2.getDOMNode().value = '';
+}
 })

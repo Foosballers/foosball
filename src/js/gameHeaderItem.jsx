@@ -18,7 +18,7 @@ var GameHeader = React.createClass({
                             </div>
                         </div>
                     </div>
-                    <a href="#" onClick={this.props.clickable ? this.props.clickable : function() { console.log('no clickable callback') } } >
+                    <a href="#" onClick={this.props.clickable ? this.props.clickable : function() { } } >
                         <div className="panel-footer">
                             <span className="pull-left">{this.props.name}</span>
                             <div className="clearfix"></div>
