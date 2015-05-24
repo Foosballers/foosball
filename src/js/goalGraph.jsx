@@ -73,24 +73,20 @@ function seriesify(goalview) {
         p2goals = [{y: p2cnt++, marker: { enabled: false } }];
     goalview.goals.forEach(function(goal){
         if(goal[1] === 'p1') {
-            p1goals.push([goal[0], p1cnt++]);
-            p2goals.push(null);
+            p1goals.push({x:goal[0], y:p1cnt++});
+            p2goals.push({x:goal[0],y:null});
         } else {
-            p2goals.push([goal[0], p2cnt++]);
-            p1goals.push(null);
+            p2goals.push({x:goal[0], y:p2cnt++});
+            p1goals.push({x:goal[0],y:null});
         }
     });
     var gcnt_m1 = p1goals.length - 1;
-    if(p1goals[gcnt_m1]===null){
-        p1goals[gcnt_m1] = {
-            x: p2goals[gcnt_m1][0],
-            y: p1cnt-1,
+    if(p1goals[gcnt_m1].y===null){
+        p1goals[gcnt_m1] = {x: p2goals[gcnt_m1].x, y: p1cnt-1,
             marker: { enabled: false, states: { hover: { enabled: false } } }
         };
     } else {
-        p2goals[gcnt_m1] = {
-            x: p1goals[gcnt_m1][0],
-            y: p2cnt-1,
+        p2goals[gcnt_m1] = {x: p1goals[gcnt_m1].x, y: p2cnt-1,
             marker: { enabled: false, states: { hover: { enabled: false } } }
         };
     }
