@@ -30,6 +30,17 @@ app.get('/players/standings', function (req, res) {
     });
 });
 
+app.get('/players', function (req, res) {
+    vault.getView('page', 'players', null, function (err, body) {
+        if (err)
+            return console.log('[view.page.payload]', err)
+
+        res.send(body.rows.map(function (row) {
+            return row.id
+        }));
+    });
+});
+
 app.get('/games/recent', function (req, res) {
     limitn = req.query.limit || 5;
     vault.getView('games', 'ended', {descending:true, limit:limitn, include_docs:true}, function (err, body) {
