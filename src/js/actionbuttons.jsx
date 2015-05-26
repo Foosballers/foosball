@@ -28,7 +28,7 @@ module.exports = React.createClass({
       ]
     return <div className="panel panel-default">
         <button type="button" className="btn btn-primary"
-            onClick={this._onStartGameClick}>Start Next</button>&nbsp;&nbsp;
+            onClick={this._onStartGameClick}>Start New Game</button>&nbsp;&nbsp;
         <button type="button" className="btn btn-primary"
             onClick={this._onStartNextGameClick}>Start Next Game</button>&nbsp;&nbsp;
         <button type="button" className="btn btn-primary"
