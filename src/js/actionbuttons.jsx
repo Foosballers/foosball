@@ -3,19 +3,22 @@ var React = require('react'),
     gameActions = require('./gamesActionCreator'),
     gameStore = require('./gamestore'),
     GoalGraph = require('./goalGraph.jsx'),
+    Select = require('react-select'),
     Modalizer = require('./modal-izer.jsx');
 
+var options = [{value:'Keith', label: 'Keith'}, {value:'Max', label:'Max'}, {value:'Kavin', label:'Kavin'}, {value:'Dimitri', label:'Dimitri'}];
 
 module.exports = React.createClass({
   getInitialState: function() {
     return { _onformsubmit: function() {}, _modalHeader: 'ima header' }
   }
 , _submitGame: function(){
-    gameActions.startGame({player1: this.refs.player1.getDOMNode().value, player2: this.refs.player2.getDOMNode().value})
+    gameActions.startGame({player1: this.refs.player1.state.value, player2: this.refs.player2.state.value})
     this.handleExternalHide();
   }
 , _queueGame: function(){
-    gameActions.queueGame({player1: this.refs.player1.getDOMNode().value, player2: this.refs.player2.getDOMNode().value})
+  asdfdsafs
+    gameActions.queueGame({player1: this.refs.player1.state.value, player2: this.refs.player2.state.value})
     this.handleExternalHide();
   }
 , render: function() {
@@ -38,13 +41,11 @@ module.exports = React.createClass({
             buttons={buttons}>
         <div className="panel-body">
           <form role="form">
-            <div className="input-group">
-              <span className="input-group-addon"><i className="fa fa-user"></i></span>
-              <input className="form-control" ref="player1" placeholder="Player 1"></input>
+            <div>
+              <Select ref="player1" name="player1" delimiter="/" options={options} multi={true} ></Select>
             </div><br />
-            <div className="input-group">
-              <span className="input-group-addon"><i className="fa fa-user"></i></span>
-              <input className="form-control" ref="player2" placeholder="Player 2"></input>
+            <div>
+              <Select ref="player2" name="player2" delimiter="/" options={options} multi={true}></Select>
             </div>
             <div className="input-group" hidden="hidden" >
               <button type="submit" className="btn btn-primary hidden hide" onClick={this.state._onformsubmit}>game on</button>
