@@ -1,10 +1,11 @@
 var gulp = require('gulp'),
     uglify = require('gulp-uglify'),
-    htmlreplace = require('gulp-html-replace'),
     browserSync = require('browser-sync'),
     source = require('vinyl-source-stream'),
     del = require('del'),
     browserify = require('browserify'),
+    sourcemaps = require('gulp-sourcemaps'),
+    buffer = require('vinyl-buffer'),
     watchify = require('watchify'),
     reactify = require('reactify'),
     streamify = require('gulp-streamify');
@@ -28,9 +29,12 @@ gulp.task('copy', function() {
         .pipe(gulp.dest(path.DEST));
     gulp.src(path.ICON)
         .pipe(gulp.dest(path.DEST));
+    gulp.src('./node_modules/react-select/dist/default.css')
+        .pipe(gulp.dest(path.DEST + '/css'));
     gulp.src(path.CSS)
         .pipe(gulp.dest(path.DEST + '/css'));
     gulp.src(path.JSLIBS)
+        .pipe(uglify())
         .pipe(gulp.dest(path.DEST + '/js'));
     gulp.src(path.FONTS)
         .pipe(gulp.dest(path.DEST + '/fonts'));
@@ -65,29 +69,39 @@ gulp.task('watch', ['copy'], function() {
 
 });
 
-gulp.task('build',['copy'], function() {
-    browserify({
-        entries: [path.ENTRY_POINT],
-        transform: [reactify]
-    })
+gulp.task('build-dev', ['copy'], function() {
+    return browserify({
+            entries: [path.ENTRY_POINT],
+            transform: [reactify],
+            debug: true,
+        })
         .bundle()
         .pipe(source(path.OUT))
+        .pipe(buffer())
+        .pipe(sourcemaps.init({
+            loadMaps: true
+        }))
+        .pipe(sourcemaps.write('./'))
         .pipe(gulp.dest(path.DEST_SRC));
 });
 
-gulp.task('replaceHTML', function() {
-    gulp.src(path.HTML)
-        .pipe(htmlreplace({
-            'js': 'build/' + path.MINIFIED_OUT
-        }))
-        .pipe(gulp.dest(path.DEST));
+gulp.task('build', ['copy'], function() {
+    return browserify({
+            entries: [path.ENTRY_POINT],
+            transform: [reactify]
+        })
+        .bundle()
+        .pipe(source(path.OUT))
+        .pipe(buffer())
+        .pipe(uglify())
+        .pipe(gulp.dest(path.DEST_SRC));
 });
 
-gulp.task('clean', function () {
+gulp.task('clean', function() {
     del.sync(path.DEST);
 })
 
 gulp.task('re-db', function() {
-   require('./couch_views/database-recreate')
-   require('./couch_views/game-inserter')
+    require('./couch_views/database-recreate')
+    require('./couch_views/game-inserter')
 })
