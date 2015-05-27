@@ -6,7 +6,7 @@ var foosdb = nano.use('foosball')
 function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
-var players = ['Keith', 'Max', 'Kavin', 'Boguste', 'Max/Keith', 'Kavin/Dimitri', 'Boguste/Kavin', 'Kevin'];
+var players = ['Keith', 'Max', 'Kavin', 'Boguste', 'Keith/Max', 'Dimitri/Kavin', 'Boguste/Kavin', 'Kevin'];
 
 function insertPlayers() {
     var players_maybe_dups = Function.prototype.apply.bind(Array.prototype.concat, [])(players.map(function(elm){ return elm.split('/') }));
