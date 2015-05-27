@@ -2,29 +2,39 @@ var React = require('react'),
     constants = require('./NotificationConstants'),
     gameActions = require('./gamesActionCreator'),
     gameStore = require('./gamestore'),
+    playerStore = require('./playerStore'),
     GoalGraph = require('./goalGraph.jsx'),
     Select = require('react-select'),
     Modalizer = require('./modal-izer.jsx');
 
-var options = [{value: 'Keith', label: 'Keith'}, {value: 'Max', label: 'Max'}, {
-    value: 'Kavin',
-    label: 'Kavin'
-}, {value: 'Dimitri', label: 'Dimitri'}];
+var buildOptions = function(players){
+    return players.map(function(player){
+        return {value: player, label: player};
+    });
+}
 
 module.exports = React.createClass({
+    _onChange: function(event){
+      this.setState({players: buildOptions(playerStore.getPlayers())});
+    },
     getInitialState: function () {
+        var players = playerStore.getPlayers();
         return {
             _onformsubmit: function () {
-            }, _modalHeader: 'ima header'
+            },
+            _modalHeader: 'ima header',
+            players: players
         }
-    }
-    , _submitGame: function () {
+    },
+    componentDidMount: function(){
+      playerStore.addChangeListener(this._onChange);
+    },
+    _submitGame: function () {
         var players1 = this.refs.player1.state.value.split('/').sort().join('/');
-        var players2= this.refs.player2.state.value.split('/').sort().join('/');
+        var players2 = this.refs.player2.state.value.split('/').sort().join('/');
         gameActions.startGame({player1: players1, player2: players2});
         this.handleExternalHide();
-    }
-    , _queueGame: function () {
+    }, _queueGame: function () {
         gameActions.queueGame({player1: this.refs.player1.state.value, player2: this.refs.player2.state.value})
         this.handleExternalHide();
     },
@@ -54,12 +64,14 @@ module.exports = React.createClass({
                 <div className="panel-body">
                     <form role="form">
                         <div>
-                            <Select ref="player1" name="player1" delimiter="/" options={options} multi={true} onChange={this._player1Changed}></Select>
+                            <Select ref="player1" name="player1" delimiter="/" options={this.state.players} multi={true}
+                                    onChange={this._player1Changed}></Select>
                         </div>
                         <br />
 
                         <div>
-                            <Select ref="player2" name="player2" delimiter="/" options={options} multi={true} onChange={this._player2Changed}></Select>
+                            <Select ref="player2" name="player2" delimiter="/" options={this.state.players} multi={true}
+                                    onChange={this._player2Changed}></Select>
                         </div>
                         <div className="input-group" hidden="hidden">
                             <button type="submit" className="btn btn-primary hidden hide"

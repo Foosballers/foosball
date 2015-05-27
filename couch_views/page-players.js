@@ -6,7 +6,7 @@ var view = {
     //map
     map: function (doc) {
         if(doc.type === 'player') {
-            emit(doc._id);
+            emit(doc._id, {value: doc._id, label: doc._id});
         }
     }
 }
