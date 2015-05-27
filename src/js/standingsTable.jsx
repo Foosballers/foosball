@@ -10,7 +10,7 @@ var standingsTable = React.createClass({
     },
     render: function () {
         var rows = this.state.standings.map(function(row){
-            return <tr>
+            return <tr key={row.player}>
                       <td>{row.player}</td>
                       <td>{row.wins}</td>
                       <td>{row.losses}</td>

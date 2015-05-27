@@ -11,7 +11,7 @@ var RecentResults = React.createClass({
             ? <span className="left-border-gray"><i className="fa fa-area-chart"></i></span>
             : '';
         var results = this.props.games.map(function (game) {
-            return <a href="#" onClick={f(game)} className="list-group-item">
+            return <a href="#" onClick={f(game)} className="list-group-item" key={game.id}>
                         <i className={(game.player1Score > game.player2Score) ? "fa fa-trophy fa-fw" : ""}></i>
                             {game.player1} - {game.player1Score}
                         <span className="pull-right">{game.player2Score} - {game.player2}

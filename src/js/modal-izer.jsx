@@ -78,10 +78,11 @@ module.exports = React.createClass({
 , handleShown: function() {
   this.refs._xclose.getDOMNode().focus();
 }
+, displayName: 'Modalizer'
  
 , render: function() {
-    var buttons = this.props.buttons.map(function(button) {
-      return <button type="button" className={'btn btn-' + button.type} onClick={button.handler}>
+    var buttons = this.props.buttons.map(function(button, idx) {
+      return <button type="button" className={'btn btn-' + button.type} onClick={button.handler} key={idx} >
         {button.text}
       </button>
     })

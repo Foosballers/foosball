@@ -34,7 +34,6 @@ var playerStore = assign({}, EventEmitter.prototype, {
 dispatcher.register(function(action){
    switch(action.type){
        case constants.PLAYERS_LOADED:
-           console.log("PLAYERS:", action);
            players = action.data;
            playerStore.emitChange();
    }
