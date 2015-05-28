@@ -87,7 +87,7 @@ module.exports = React.createClass({
       </button>
     })
     return <div className="modal fade">
-      <div className="modal-dialog">
+      <div className={"modal-dialog" + (this.props.small?" modal-sm":"")}>
         <div className="modal-content">
           <div className="modal-header">
             <button type="button" className="close" ref="_xclose" onClick={this.hide}>×</button>
