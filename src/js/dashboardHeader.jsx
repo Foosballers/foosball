@@ -31,7 +31,7 @@ var DashboardHeader = React.createClass({
                         show={false}
                         handleShown={this._showGraph}
                         handleHidden={this._closeGraph}
-                        header="- game chart -"
+                        header={last_game ? last_game.player1 + " - vs - " + last_game.player2 : "- game chart -"}
                         buttons={[{type:'danger',text:'close',handler:this._closeModal}]}>
                         <GoalGraph ref="rec_g_graph" gameId={last_game ? last_game.id : null} />
                     </Modalizer>

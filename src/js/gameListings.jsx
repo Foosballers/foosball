@@ -26,7 +26,7 @@ var listing = React.createClass({
                 show={false}
                 handleShown={this._showGraph}
                 handleHidden={this._closeGraph}
-                header=""
+                header={this.state.modal_header ? this.state.modal_header : "- game chart -"}
                 buttons={[{type:'danger',text:'close',handler:this._closeModal}]}>
                 <GoalGraph gameId={this.state.chartGameId} ref="game_goal_modalizer" />
             </Modalizer></div>;
@@ -43,7 +43,7 @@ var listing = React.createClass({
   , _openModal: function (game) {
         var that = this;
         return function() {
-            that.setState({chartGameId: game.id});
+            that.setState({chartGameId: game.id, modal_header: game.player1 + " - vs - " + game.player2 });
             that.refs.recentModal.show();
         }
     }

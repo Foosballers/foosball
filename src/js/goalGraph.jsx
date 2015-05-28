@@ -8,7 +8,7 @@ function chartify(seriesData) {
     return {
         chart: { type: 'areaspline' },
         credits: false,
-        title: { text: 'goals' },
+        title: { text: null },
         tooltip: {
             shared: true,
             formatter: function () {
