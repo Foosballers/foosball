@@ -5,8 +5,7 @@
 var React = require('react'),
     gameStore = require('./gamestore'),
     gameActions = require('./gamesActionCreator'),
-    Modalizer = require('./modal-izer.jsx'),
-    GoalGraph = require('./goalGraph.jsx'),
+    modalActions = require('./modalActionCreator'),
     GameList = require('./gameList.jsx');
 
 var listing = React.createClass({
@@ -19,33 +18,13 @@ var listing = React.createClass({
     componentDidMount: function(){
        gameStore.addChangeListener(this._onChange);
     },
-    render: function(){
-        return <div className="col-lg-4"><GameList name="Recent Games" games={this.state.games} onclickcb={this._openModal} icon="fa-area-chart" />
-            <GameList name="Upcoming Games" games={this.state.queue} onclickcb={this._startQueuedGame} />
-            <Modalizer ref="recentModal"
-                show={false}
-                handleShown={this._showGraph}
-                handleHidden={this._closeGraph}
-                header={this.state.modal_header ? this.state.modal_header : "- game chart -"}
-                buttons={[{type:'danger',text:'close',handler:this._closeModal}]}>
-                <GoalGraph gameId={this.state.chartGameId} ref="game_goal_modalizer" />
-            </Modalizer></div>;
-    }
-  , _showGraph: function() {
-    this.refs.game_goal_modalizer._show()
-  }
-  , _closeGraph: function() {
-    this.refs.game_goal_modalizer._hide()
-  }
-  , _closeModal: function () {
-        this.refs.recentModal.hide();
+    render: function() {
+        return  <div className="col-lg-4"><GameList name="Recent Games" games={this.state.games} onclickcb={this._openModal} icon="fa-area-chart" />
+                    <GameList name="Upcoming Games" games={this.state.queue} onclickcb={this._startQueuedGame} />
+                </div>
     }
   , _openModal: function (game) {
-        var that = this;
-        return function() {
-            that.setState({chartGameId: game.id, modal_header: game.player1 + " - vs - " + game.player2 });
-            that.refs.recentModal.show();
-        }
+        return function() { modalActions.modalGame(game); };
     }
   , _startQueuedGame: function(game){
         return function() { gameActions.startGame(game); };

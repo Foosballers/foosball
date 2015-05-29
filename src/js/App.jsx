@@ -3,9 +3,11 @@ var React = require('react'),
     ActionButtons = require('./actionbuttons.jsx'),
     GameListings = require('./gameListings.jsx'),
     StandingsTable = require('./standingsTable.jsx'),
+    ModalGameController = require('./modalGameController.jsx');
     DashboardHeader = require('./dashboardHeader.jsx');
 
 React.render(<ActionButtons/>, document.getElementById('actions'));
 React.render(<div><DashboardHeader /></div>, document.getElementById('banners'));
 React.render(<GameListings />, document.getElementById('gameListings'));
 React.render(<StandingsTable />, document.getElementById('standings'));
+React.render(<ModalGameController />, document.getElementById("game-modalizer"));
