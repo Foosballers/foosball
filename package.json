@@ -7,6 +7,9 @@
     "postinstall": "gulp build",
     "start": "node server"
   },
+  "engines": {
+    "node": "0.12.x"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/thedreadpirate/foosball.git"
@@ -31,6 +34,8 @@
     "del": "^1.1.1",
     "express": "^4.12.3",
     "flux": "^2.0.3",
+    "grunt": "^0.4.5",
+    "grunt-css-url-replace": "^0.2.5",
     "gulp": "^3.8.11",
     "gulp-html-replace": "^1.4.5",
     "gulp-if": "^1.2.5",
