@@ -7,6 +7,9 @@
     "postinstall": "gulp build",
     "start": "node server"
   },
+  "engines": {
+    "node": "0.12.x"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/thedreadpirate/foosball.git"
